@@ -9,6 +9,7 @@ atlas-sensors:
   temperature-do:
     name: "Temperature from Dissolved Oxygen Sensor"
     address: 0x66
+bluerobotics-sensors:
   depth:
     name: "Depth Sensor"
     address: 0x76
