@@ -1,5 +1,15 @@
 import yaml
 from atlas_i2c import commands, sensors, atlas_i2c
+from pony.orm import *
+from models import db
+from models import Measurement
+
+db.bind(provider='sqlite', filename='measurements.sqlite', create_db=True)
+db.generate_mapping(create_tables=True)
+
+@db_session
+def write_reading(sensor, reading):
+    Measurement(sensor=sensor, reading=float(reading))
 
 atlas_sensors = []
 bluerobotics_sensors = []
@@ -21,13 +31,17 @@ if "bluerobotics-sensors" in cfg:
         bluerobotics_sensors.append(sensor)
 
 
-for sensor in atlas_sensors:
-    sensor.connect()
-    response = sensor.query(commands.READ)
-    print(f"Data for {sensor.name}: {response.data}")
 
-for sensor in bluerobotics_sensors:
-    sensor.init()
-    sensor.read(ms5837.OSR_256)
-    print(sensor.pressure())
-    print(sensor.temperature())
+
+while True:
+    for sensor in atlas_sensors:
+        sensor.connect()
+        response = sensor.query(commands.READ)
+        write_reading(sensor.name, response.data.decode("UTF-8"))
+        print(f"Data for {sensor.name}: {response.data}")
+
+    for sensor in bluerobotics_sensors:
+        sensor.init()
+        sensor.read(ms5837.OSR_256)
+        write_reading("Bluerobotics Pressure", sensor.pressure())
+        write_reading("Bluerobotics Temperature", sensor.temperature())
