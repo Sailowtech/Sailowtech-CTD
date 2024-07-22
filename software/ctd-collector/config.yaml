@@ -1,4 +1,4 @@
-device: Test CTD
+device: Sailow CTD
 atlas-sensors:
   dissolved-oxygen:
     name: "Dissolved Oxygen"
