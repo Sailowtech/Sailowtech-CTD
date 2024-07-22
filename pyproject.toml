@@ -5,10 +5,11 @@ description = ""
 authors = ["Arthur Jacobs <arthur.jacobs@sailowtech.ch>",
     "Mauro"]
 readme = "README.md"
-packages = [{ include = "sailowtech_ctd" }]
+packages = [{ include = "software/sailowtech_ctd" }]
 
 [tool.poetry.dependencies]
 python = "^3.9"
+pyyaml = "^6.0.1"
 
 
 [build-system]
