@@ -30,33 +30,33 @@ class Sensor:
     brand: SensorBrand
 
 
-# I'm sorry for this. Hardcoding all the sensors.
-sensors: list[Sensor] = [
-    Sensor(SensorType.DISSOLVED_OXY, "Dissolved Oxygen", 0x61, SensorBrand.Atlas),
-    Sensor(SensorType.CONDUCTIVITY, "Conductivity Probe", 0x64, SensorBrand.Atlas),
-    Sensor(SensorType.DISSOLVED_OXY_TEMP, "Temperature from Dissolved Oxygen Sensor", 0x66, SensorBrand.Atlas),
-    Sensor(SensorType.DEPTH, "Depth Sensor", 0x76, SensorBrand.BlueRobotics),
-]
-
-MEASUREMENTS_INTERVAL = 1  # seconds
-
-
 class CTD:
+    # I'm sorry for this. Hardcoding all the sensors.
+    SENSORS: list[Sensor] = [
+        Sensor(SensorType.DISSOLVED_OXY, "Dissolved Oxygen", 0x61, SensorBrand.Atlas),
+        Sensor(SensorType.CONDUCTIVITY, "Conductivity Probe", 0x64, SensorBrand.Atlas),
+        Sensor(SensorType.DISSOLVED_OXY_TEMP, "Temperature from Dissolved Oxygen Sensor", 0x66, SensorBrand.Atlas),
+        Sensor(SensorType.DEPTH, "Depth Sensor", 0x76, SensorBrand.BlueRobotics),
+    ]
+
+    MEASUREMENTS_INTERVAL = 1  # seconds
+
     def __init__(self, config_path):
         self.name: str = ''
-        self.sensors_config: dict[str, dict[str, dict[str, str]]] = {}
+        # self.sensors_config: dict[str, dict[str, dict[str, str]]] = {}
         self.sensors: list[GenericSensor] = []
         self.interval: float = 0.
 
-        self.load_config(config_path)
+        # self.load_config(config_path)
 
-    def load_config(self, config_path):
-        with open(config_path) as f:
-            config = yaml.load(f, Loader=yaml.FullLoader)
-
-        self.name = config["device"]
-        self.sensors_config = config["sensors"]
-        self.interval = config["measurements-interval"]
+    # TODO : hardcoded for now
+    # def load_config(self, config_path):
+    #     with open(config_path) as f:
+    #         config = yaml.load(f, Loader=yaml.FullLoader)
+    #
+    #     self.name = config["device"]
+    #     self.sensors_config = config["sensors"]
+    #     self.interval = config["measurements-interval"]
 
     def setup_sensors(self):
         for atlas_sensors in self.sensors_config["atlas-sensors"].keys():
