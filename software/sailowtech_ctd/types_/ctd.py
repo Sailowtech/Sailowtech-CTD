@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from enum import Enum, auto
 
 import yaml
@@ -12,7 +13,7 @@ class SensorBrand(Enum):
     BlueRobotics = auto()
 
 
-class Sensor(Enum):
+class SensorType(Enum):
     # Atlas
     DISSOLVED_OXY = auto()
     CONDUCTIVITY = auto()
@@ -21,14 +22,21 @@ class Sensor(Enum):
     DEPTH = auto()
 
 
+@dataclass
+class Sensor:
+    type: SensorType
+    name: str
+    address: int
+    brand: SensorBrand
+
+
 # I'm sorry for this. Hardcoding all the sensors.
-sensors: dict[Sensor, dict] = {
-    Sensor.DISSOLVED_OXY: {"name": "Dissolved Oxygen", "address": 0x61, "type": SensorBrand.Atlas},
-    Sensor.CONDUCTIVITY: {"name": "Conductivity Probe", "address": 0x64, "type": SensorBrand.Atlas},
-    Sensor.DISSOLVED_OXY_TEMP: {"name": "Temperature from Dissolved Oxygen Sensor", "address": 0x66,
-                                "type": SensorBrand.Atlas},
-    Sensor.DEPTH: {"name": "Depth Sensor", "address": 0x76, "type": SensorBrand.BlueRobotics},
-}
+sensors: list[Sensor] = [
+    Sensor(SensorType.DISSOLVED_OXY, "Dissolved Oxygen", 0x61, SensorBrand.Atlas),
+    Sensor(SensorType.CONDUCTIVITY, "Conductivity Probe", 0x64, SensorBrand.Atlas),
+    Sensor(SensorType.DISSOLVED_OXY_TEMP, "Temperature from Dissolved Oxygen Sensor", 0x66, SensorBrand.Atlas),
+    Sensor(SensorType.DEPTH, "Depth Sensor", 0x76, SensorBrand.BlueRobotics),
+]
 
 MEASUREMENTS_INTERVAL = 1  # seconds
 
