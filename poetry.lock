@@ -60,7 +60,23 @@ files = [
     {file = "PyYAML-6.0.1.tar.gz", hash = "sha256:bfdf460b1736c775f2ba9f6a92bca30bc2095067b8a9d77876d1fad6cc3b4a43"},
 ]
 
+[[package]]
+name = "smbus2"
+version = "0.4.3"
+description = "smbus2 is a drop-in replacement for smbus-cffi/smbus-python in pure Python"
+optional = false
+python-versions = "*"
+files = [
+    {file = "smbus2-0.4.3-py2.py3-none-any.whl", hash = "sha256:a2fc29cfda4081ead2ed61ef2c4fc041d71dd40a8d917e85216f44786fca2d1d"},
+    {file = "smbus2-0.4.3.tar.gz", hash = "sha256:36f2288a8e1a363cb7a7b2244ec98d880eb5a728a2494ac9c71e9de7bf6a803a"},
+]
+
+[package.extras]
+docs = ["sphinx (>=1.5.3)"]
+qa = ["flake8"]
+test = ["mock", "nose"]
+
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "c25c564085843a63256c658f907ab38af1a6008b552d682d7e7fba3dfc1de0a2"
+content-hash = "4f22dbd8da50ebff28abc8d5b7cc082a7dc1aa9507c46e0b3477ee0cc4ffcefa"

@@ -10,6 +10,7 @@ packages = [{ include = "software/sailowtech_ctd" }]
 [tool.poetry.dependencies]
 python = "^3.9"
 pyyaml = "^6.0.1"
+smbus2 = "^0.4.3"
 
 
 [build-system]
