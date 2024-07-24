@@ -1,3 +1,16 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+This program aims to facilitate communication with multiple sensors inside a CTD.
+For now, it supports I2C protocol but there should be more in the future.
+
+Credits for I2C protocol: "https://github.com/Atlas-Scientific/Raspberry-Pi-sample-code/blob/master/AtlasI2C.py"]
+Contact                 : "arthur.jacobs@sailowtech.ch"
+"""
+
+from pprint import pprint
+
 import yaml
 from types_.ctd import CTD
 from types_.sensors.generic import GenericSensor
@@ -9,9 +22,11 @@ if __name__ == '__main__':
     bluerobotics_sensors = []
 
     ctd = CTD(config_path="config.yaml")
-    # ctd.setup_sensors()
-    #
-    # print(ctd.sensors)
+    ctd.setup_sensors()
+
+    pprint(ctd.sensors)
+
+    ctd.start_measurements()
 
     # if "atlas-sensors" in cfg:
     #     for sensor_cfg in cfg["atlas-sensors"]:
