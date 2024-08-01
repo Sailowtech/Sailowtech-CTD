@@ -17,6 +17,9 @@ class SensorType(Enum):
 
 
 class GenericSensor:
+    class Commands(Enum):
+        ...
+    
     def __init__(self, sensor_type: SensorType, name: str, address: int, brand: SensorBrand, min_delay: float = 1):
         self.sensor_type: SensorType = sensor_type
         self.brand: SensorBrand = brand
