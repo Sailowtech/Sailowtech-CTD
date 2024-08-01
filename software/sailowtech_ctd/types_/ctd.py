@@ -1,50 +1,26 @@
+import time
 from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Union
 
 import yaml
 
-from software.sailowtech_ctd.types_.sensors.generic import GenericSensor
+from software.sailowtech_ctd.types_.sensors.generic import GenericSensor, SensorType
 from software.sailowtech_ctd.types_.sensors.atlas import AtlasSensor
 from software.sailowtech_ctd.types_.sensors.bluerobotics import BlueRoboticsSensor
-
-
-# class SensorBrand(Enum):
-#     Atlas = auto()
-#     BlueRobotics = auto()
 
 
 class TooShortInterval(Exception):
     pass
 
 
-#
-# class SensorType(Enum):  # Warning : only one sensor of each type can be used
-#     # Atlas
-#     DISSOLVED_OXY = auto()
-#     CONDUCTIVITY = auto()
-#     DISSOLVED_OXY_TEMP = auto()
-#     # Blue robotics
-#     DEPTH = auto()
-#
-#
-# @dataclass
-# class Sensor:
-#     type: SensorType
-#     name: str
-#     address: int
-#     brand: SensorBrand
-#     last_read: float = 0.
-#     min_delay: float = 1
-
-
 class CTD:
     # I'm sorry for this. Hardcoding all the sensors.
-    DEFAULT_SENSORS: list[Sensor] = [
-        Sensor(SensorType.DISSOLVED_OXY, "Dissolved Oxygen", 0x61, SensorBrand.Atlas),
-        Sensor(SensorType.CONDUCTIVITY, "Conductivity Probe", 0x64, SensorBrand.Atlas),
-        Sensor(SensorType.DISSOLVED_OXY_TEMP, "Temperature from Dissolved Oxygen Sensor", 0x66, SensorBrand.Atlas),
-        Sensor(SensorType.DEPTH, "Depth Sensor", 0x76, SensorBrand.BlueRobotics),
+    DEFAULT_SENSORS: list[GenericSensor] = [
+        AtlasSensor(SensorType.DISSOLVED_OXY, "Dissolved Oxygen", 0x61),
+        AtlasSensor(SensorType.CONDUCTIVITY, "Conductivity Probe", 0x64),
+        AtlasSensor(SensorType.DISSOLVED_OXY_TEMP, "Temperature from Dissolved Oxygen Sensor", 0x66),
+        BlueRoboticsSensor(SensorType.DEPTH, "Depth Sensor", 0x76),
     ]
 
     MEASUREMENTS_INTERVAL = 1  # seconds
@@ -52,8 +28,7 @@ class CTD:
     def __init__(self, config_path):
         self.name: str = ''
         # self.sensors_config: dict[str, dict[str, dict[str, str]]] = {}
-        self._sensors: list[
-            Union[GenericSensor, Sensor]] = []  # For now, accepts generic and Sensor dataclass. Choose one later
+        self._sensors: list[GenericSensor] = []
 
         # self.load_config(config_path)
 
