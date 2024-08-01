@@ -6,29 +6,36 @@ import yaml
 
 from software.sailowtech_ctd.types_.sensors.generic import GenericSensor
 from software.sailowtech_ctd.types_.sensors.atlas import AtlasSensor
-from software.sailowtech_ctd.types_.sensors.blue_robotics import BlueRoboticsSensor
+from software.sailowtech_ctd.types_.sensors.bluerobotics import BlueRoboticsSensor
 
 
-class SensorBrand(Enum):
-    Atlas = auto()
-    BlueRobotics = auto()
+# class SensorBrand(Enum):
+#     Atlas = auto()
+#     BlueRobotics = auto()
 
 
-class SensorType(Enum):
-    # Atlas
-    DISSOLVED_OXY = auto()
-    CONDUCTIVITY = auto()
-    DISSOLVED_OXY_TEMP = auto()
-    # Blue robotics
-    DEPTH = auto()
+class TooShortInterval(Exception):
+    pass
 
 
-@dataclass
-class Sensor:
-    type: SensorType
-    name: str
-    address: int
-    brand: SensorBrand
+#
+# class SensorType(Enum):  # Warning : only one sensor of each type can be used
+#     # Atlas
+#     DISSOLVED_OXY = auto()
+#     CONDUCTIVITY = auto()
+#     DISSOLVED_OXY_TEMP = auto()
+#     # Blue robotics
+#     DEPTH = auto()
+#
+#
+# @dataclass
+# class Sensor:
+#     type: SensorType
+#     name: str
+#     address: int
+#     brand: SensorBrand
+#     last_read: float = 0.
+#     min_delay: float = 1
 
 
 class CTD:
