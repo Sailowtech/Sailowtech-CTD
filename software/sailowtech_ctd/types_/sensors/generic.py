@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum, auto
+from typing import Callable
 
 
 class SensorBrand(Enum):
@@ -29,6 +30,9 @@ class GenericSensor:
 
         self.min_delay: float = min_delay
         self.last_read: float = 0.
+
+    def init(self, write: Callable[[int, int], None]):
+        ...
 
     def read_value(self):
         ...
