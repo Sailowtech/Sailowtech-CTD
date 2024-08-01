@@ -47,9 +47,11 @@ class CTD:
         # self.sensors_config: dict[str, dict[str, dict[str, str]]] = {}
         self._sensors: list[
             Union[GenericSensor, Sensor]] = []  # For now, accepts generic and Sensor dataclass. Choose one later
-        self.interval: float = 0.
 
         # self.load_config(config_path)
+
+        self._min_delay: float = 3.
+        self._last_measurement: float = 0.
 
     @property
     def sensors(self):
@@ -87,11 +89,40 @@ class CTD:
     def setup_sensors(self):
         self.sensors = self.DEFAULT_SENSORS
 
-    # todo : check time interval is greater than sum of time limit for each sensor
+        # Compute global minimum delay
+        self._min_delay = sum([sensor.min_delay for sensor in self.sensors])
+
+        # self._calibrate_atlas_sensors()
+        # self._calibrate_bluerobotics_sensors()
 
     def measure(self, sensor: Sensor):
-        pass
+        """
 
-    def start_measurements(self):
+        :param sensor:
+        :return: None if error / not supported, float value instead
+        """
+
+        if time.time() - sensor.last_read < sensor.min_delay:
+            print(f"Sensor '{sensor.name}' needs to wait longer between measurements !")
+            raise TooShortInterval()
+
+        measurement: float = None
+        if sensor.brand == SensorBrand.BlueRobotics:
+            # Do something
+            pass
+        elif sensor.brand == SensorBrand.Atlas:
+            # Do something
+            pass
+        else:
+            print(f"Sensor brand '{sensor.brand}' not supported yet !")
+
+        return measurement
+
+    def measure_all(self):
+        if time.time() - self._last_measurement < self.MEASUREMENTS_INTERVAL:
+            print("Wait longer !")
+            raise TooShortInterval()
+
+        results = dict()
         for sensor in self.sensors:
-            print(f'Measuring {sensor.name} ...')
+            results[sensor.type] = self.measure(sensor)
