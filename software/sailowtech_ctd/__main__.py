@@ -11,8 +11,10 @@ Contact                 : "arthur.jacobs@sailowtech.ch"
 import time
 from pprint import pprint
 
+from software.sailowtech_ctd.types_.ctd import CTD
+
 # from software.sailowtech_ctd.types_.sensors.bluerobotics import BlueRoboticsSensor
-from types_.ctd import CTD
+
 
 # from atlas_i2c import commands, sensors, atlas_i2c
 
