@@ -1,6 +1,6 @@
 from enum import Enum, auto
 
-from generic import GenericSensor, SensorType, SensorBrand
+from types_.sensors.generic import GenericSensor, SensorType, SensorBrand
 
 
 class AtlasSensor(GenericSensor):
