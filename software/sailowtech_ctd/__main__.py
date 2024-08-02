@@ -13,7 +13,7 @@ import sys
 import time
 from pprint import pprint
 
-from software.sailowtech_ctd.types_.sensors.test import Test
+from types_.sensors.test import Test
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # from types_.ctd import CTD
