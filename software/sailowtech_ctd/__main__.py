@@ -8,10 +8,12 @@ For now, it supports I2C protocol but there should be more in the future.
 Credits for I2C protocol: "https://github.com/Atlas-Scientific/Raspberry-Pi-sample-code/blob/master/AtlasI2C.py"]
 Contact                 : "arthur.jacobs@sailowtech.ch"
 """
-
+import time
 from pprint import pprint
 
 import yaml
+
+# from software.sailowtech_ctd.types_.sensors.bluerobotics import BlueRoboticsSensor
 from types_.ctd import CTD
 from types_.sensors.generic import GenericSensor
 
@@ -29,6 +31,7 @@ if __name__ == '__main__':
     i = 0
     while True and i < 1000:
         ctd.measure_all()
+        time.sleep(1)
         i += 1
 
     # if "atlas-sensors" in cfg:
