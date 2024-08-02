@@ -13,8 +13,10 @@ import sys
 import time
 from pprint import pprint
 
+from software.sailowtech_ctd.types_.sensors.test import Test
+
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from types_.ctd import CTD
+# from types_.ctd import CTD
 
 # from software.sailowtech_ctd.types_.sensors.bluerobotics import BlueRoboticsSensor
 
@@ -24,17 +26,17 @@ from types_.ctd import CTD
 if __name__ == '__main__':
     atlas_sensors = []
     bluerobotics_sensors = []
-
-    ctd = CTD(config_path="config.yaml")
-    ctd.setup_sensors()
-
-    pprint(ctd.sensors)
-
-    i = 0
-    while True and i < 1000:
-        ctd.measure_all()
-        time.sleep(1)
-        i += 1
+    a = Test()
+    # ctd = CTD(config_path="config.yaml")
+    # ctd.setup_sensors()
+    #
+    # pprint(ctd.sensors)
+    #
+    # i = 0
+    # while True and i < 1000:
+    #     ctd.measure_all()
+    #     time.sleep(1)
+    #     i += 1
 
     # if "atlas-sensors" in cfg:
     #     for sensor_cfg in cfg["atlas-sensors"]:
