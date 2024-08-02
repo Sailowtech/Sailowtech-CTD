@@ -13,6 +13,7 @@ import sys
 import time
 from pprint import pprint
 
+from types_.ctd import CTD
 from types_.sensors.test import Test
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -26,8 +27,8 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 if __name__ == '__main__':
     atlas_sensors = []
     bluerobotics_sensors = []
-    a = Test()
-    # ctd = CTD(config_path="config.yaml")
+
+    ctd = CTD(config_path="config.yaml")
     # ctd.setup_sensors()
     #
     # pprint(ctd.sensors)
