@@ -14,7 +14,6 @@ import time
 from pprint import pprint
 
 from types_.ctd import CTD
-from types_.sensors.test import Test
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # from types_.ctd import CTD
