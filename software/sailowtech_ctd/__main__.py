@@ -11,11 +11,8 @@ Contact                 : "arthur.jacobs@sailowtech.ch"
 import time
 from pprint import pprint
 
-import yaml
-
 # from software.sailowtech_ctd.types_.sensors.bluerobotics import BlueRoboticsSensor
 from types_.ctd import CTD
-from types_.sensors.generic import GenericSensor
 
 # from atlas_i2c import commands, sensors, atlas_i2c
 

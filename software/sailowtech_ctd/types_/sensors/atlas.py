@@ -1,6 +1,6 @@
 from enum import Enum, auto
 
-from software.sailowtech_ctd.types_.sensors.generic import GenericSensor, SensorBrand, SensorType
+from generic import GenericSensor, SensorBrand, SensorType
 
 
 class AtlasSensor(GenericSensor):
