@@ -28,15 +28,15 @@ if __name__ == '__main__':
     bluerobotics_sensors = []
 
     ctd = CTD(config_path="config.yaml")
-    # ctd.setup_sensors()
-    #
-    # pprint(ctd.sensors)
-    #
-    # i = 0
-    # while True and i < 1000:
-    #     ctd.measure_all()
-    #     time.sleep(1)
-    #     i += 1
+    ctd.setup_sensors()
+
+    pprint(ctd.sensors)
+
+    i = 0
+    while True and i < 1000:
+        ctd.measure_all()
+        time.sleep(1)
+        i += 1
 
     # if "atlas-sensors" in cfg:
     #     for sensor_cfg in cfg["atlas-sensors"]:
