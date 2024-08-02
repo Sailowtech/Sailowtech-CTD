@@ -1,5 +1,19 @@
 # Sailowtech CTD
 
+# TODO cleanup this
+
+Install poetry : https://python-poetry.org/docs/#installing-with-the-official-installer
+In home :
+curl -sSL https://install.python-poetry.org | python3 -
+Add `export PATH="/home/ctd/.local/bin:$PATH"` to your shell configuration file. (in ~/.bashrc, add to last line)
+Check install : poetry --version
+
+git clone https://github.com/Sailowtech/Sailowtech-CTD
+
+poetry install
+
+poetry run python software/sailowtech_ctd/__main__.py
+
 ## Use with Raspberry Pi Zero 2W
 
 ### Poetry for package dependencies

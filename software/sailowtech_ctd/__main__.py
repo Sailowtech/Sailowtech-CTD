@@ -8,14 +8,10 @@ For now, it supports I2C protocol but there should be more in the future.
 Credits for I2C protocol: "https://github.com/Atlas-Scientific/Raspberry-Pi-sample-code/blob/master/AtlasI2C.py"]
 Contact                 : "arthur.jacobs@sailowtech.ch"
 """
-import os
-import sys
 import time
 from pprint import pprint
 
 from types_.ctd import CTD
-
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 if __name__ == '__main__':
     ctd = CTD(config_path="config.yaml")

@@ -2,7 +2,7 @@ from enum import Enum, auto
 from time import sleep
 import smbus2 as smbus
 
-from types_.sensors.generic import GenericSensor, SensorType, SensorBrand
+from software.sailowtech_ctd.types_.sensors.generic import GenericSensor, SensorType, SensorBrand
 
 
 class BlueRoboticsSensor(GenericSensor):
