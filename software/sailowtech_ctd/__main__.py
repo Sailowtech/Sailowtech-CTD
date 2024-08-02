@@ -14,7 +14,7 @@ import time
 from pprint import pprint
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from software.sailowtech_ctd.types_.ctd import CTD
+from types_.ctd import CTD
 
 # from software.sailowtech_ctd.types_.sensors.bluerobotics import BlueRoboticsSensor
 
