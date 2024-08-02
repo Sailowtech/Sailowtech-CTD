@@ -26,7 +26,10 @@ if __name__ == '__main__':
 
     pprint(ctd.sensors)
 
-    ctd.start_measurements()
+    i = 0
+    while True and i < 1000:
+        ctd.measure_all()
+        i += 1
 
     # if "atlas-sensors" in cfg:
     #     for sensor_cfg in cfg["atlas-sensors"]:
