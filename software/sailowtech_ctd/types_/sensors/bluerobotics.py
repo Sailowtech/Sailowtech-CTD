@@ -25,6 +25,10 @@ class DepthSensor(BlueRoboticsSensor):
 
     DEFAULT_ADDRESS = 98
 
+    # Models
+    MODEL_02BA = 0
+    MODEL_30BA = 1
+
     # Oversampling options
     OSR_256 = 0
     OSR_512 = 1
@@ -62,9 +66,10 @@ class DepthSensor(BlueRoboticsSensor):
 
     def __init__(self, name: str, address: int = DEFAULT_ADDRESS, min_delay: float = 1):
         super().__init__(SensorType.DEPTH, name, address, min_delay)
+        self._model = self.MODEL_30BA
         self._C = []
 
-        self._fluidDensity = DENSITY_FRESHWATER
+        self._fluidDensity = self.DENSITY_FRESHWATER
         self._pressure = 0
         self._temperature = 0
         self._D1 = 0
@@ -94,7 +99,7 @@ class DepthSensor(BlueRoboticsSensor):
     ###############################################################
     # FULLY COPIED FROM BLUEROBOTICS's CODE, just some parameters adapted
     def read(self, bus: smbus.SMBus, oversampling=OSR_8192):
-        if oversampling < OSR_256 or oversampling > OSR_8192:
+        if oversampling < self.OSR_256 or oversampling > self.OSR_8192:
             print("Invalid oversampling option!")
             return False
 
@@ -136,15 +141,15 @@ class DepthSensor(BlueRoboticsSensor):
     # default degrees C
     def temperature(self, conversion=UNITS_Centigrade):
         degC = self._temperature / 100.0
-        if conversion == UNITS_Farenheit:
+        if conversion == self.UNITS_Farenheit:
             return (9.0 / 5.0) * degC + 32
-        elif conversion == UNITS_Kelvin:
+        elif conversion == self.UNITS_Kelvin:
             return degC + 273
         return degC
 
     # Depth relative to MSL pressure in given fluid density
     def depth(self):
-        return (self.pressure(UNITS_Pa) - 101300) / (self._fluidDensity * 9.80665)
+        return (self.pressure(self.UNITS_Pa) - 101300) / (self._fluidDensity * 9.80665)
 
     # Altitude relative to MSL pressure
     def altitude(self):
@@ -158,7 +163,7 @@ class DepthSensor(BlueRoboticsSensor):
         Ti = 0
 
         dT = self._D2 - self._C[5] * 256
-        if self._model == MODEL_02BA:
+        if self._model == self.MODEL_02BA:
             SENS = self._C[1] * 65536 + (self._C[3] * dT) / 128
             OFF = self._C[2] * 131072 + (self._C[4] * dT) / 64
             self._pressure = (self._D1 * SENS / (2097152) - OFF) / (32768)
@@ -170,7 +175,7 @@ class DepthSensor(BlueRoboticsSensor):
         self._temperature = 2000 + dT * self._C[6] / 8388608
 
         # Second order compensation
-        if self._model == MODEL_02BA:
+        if self._model == self.MODEL_02BA:
             if (self._temperature / 100) < 20:  # Low temp
                 Ti = (11 * dT * dT) / (34359738368)
                 OFFi = (31 * (self._temperature - 2000) * (self._temperature - 2000)) / 8
@@ -192,7 +197,7 @@ class DepthSensor(BlueRoboticsSensor):
         OFF2 = OFF - OFFi
         SENS2 = SENS - SENSi
 
-        if self._model == MODEL_02BA:
+        if self._model == self.MODEL_02BA:
             self._temperature = (self._temperature - Ti)
             self._pressure = (((self._D1 * SENS2) / 2097152 - OFF2) / 32768) / 100.0
         else:
