@@ -1,13 +1,9 @@
 import time
-from dataclasses import dataclass
-from enum import Enum, auto
-from typing import Union
 
-import yaml
+import smbus2 as smbus
 
-from software.sailowtech_ctd.types_.sensors.generic import GenericSensor, SensorType
-from software.sailowtech_ctd.types_.sensors.atlas import AtlasSensor
-from software.sailowtech_ctd.types_.sensors.bluerobotics import BlueRoboticsSensor
+from software.sailowtech_ctd.types_.sensors.bluerobotics import DepthSensor
+from software.sailowtech_ctd.types_.sensors.generic import GenericSensor, SensorBrand
 
 
 class TooShortInterval(Exception):
@@ -17,15 +13,19 @@ class TooShortInterval(Exception):
 class CTD:
     # I'm sorry for this. Hardcoding all the sensors.
     DEFAULT_SENSORS: list[GenericSensor] = [
-        AtlasSensor(SensorType.DISSOLVED_OXY, "Dissolved Oxygen", 0x61),
-        AtlasSensor(SensorType.CONDUCTIVITY, "Conductivity Probe", 0x64),
-        AtlasSensor(SensorType.DISSOLVED_OXY_TEMP, "Temperature from Dissolved Oxygen Sensor", 0x66),
-        BlueRoboticsSensor(SensorType.DEPTH, "Depth Sensor", 0x76),
+        # AtlasSensor(SensorType.DISSOLVED_OXY, "Dissolved Oxygen", 0x61),
+        # AtlasSensor(SensorType.CONDUCTIVITY, "Conductivity Probe", 0x64),
+        # AtlasSensor(SensorType.DISSOLVED_OXY_TEMP, "Temperature from Dissolved Oxygen Sensor", 0x66),
+        DepthSensor("Depth Sensor", 0x76, min_delay=0.3),
     ]
+
+    # the default bus for I2C on the newer Raspberry Pis,
+    # certain older boards use bus 0
+    DEFAULT_BUS = 1
 
     MEASUREMENTS_INTERVAL = 1  # seconds
 
-    def __init__(self, config_path):
+    def __init__(self, config_path, bus=DEFAULT_BUS):
         self.name: str = ''
         # self.sensors_config: dict[str, dict[str, dict[str, str]]] = {}
         self._sensors: list[GenericSensor] = []
@@ -34,6 +34,13 @@ class CTD:
 
         self._min_delay: float = 3.
         self._last_measurement: float = 0.
+
+        try:
+            self._bus = smbus.SMBus(bus)
+        except:
+            print("Bus %d is not available." % bus)
+            print("Available busses are listed as /dev/i2c*")
+            self._bus = None
 
     @property
     def sensors(self):
@@ -74,10 +81,13 @@ class CTD:
         # Compute global minimum delay
         self._min_delay = sum([sensor.min_delay for sensor in self.sensors])
 
+        for sensor in self.sensors:
+            sensor.init(self._bus)
+
         # self._calibrate_atlas_sensors()
         # self._calibrate_bluerobotics_sensors()
 
-    def measure(self, sensor: Sensor):
+    def measure(self, sensor: GenericSensor):
         """
 
         :param sensor:
@@ -105,6 +115,7 @@ class CTD:
             print("Wait longer !")
             raise TooShortInterval()
 
-        results = dict()
-        for sensor in self.sensors:
-            results[sensor.type] = self.measure(sensor)
+        print(f'Depth value: {self.DEFAULT_SENSORS[0].measure_value(self._bus)}')
+        # results = dict()
+        # for sensor in self.sensors:
+        #     results[sensor.type] = self.measure(sensor)
