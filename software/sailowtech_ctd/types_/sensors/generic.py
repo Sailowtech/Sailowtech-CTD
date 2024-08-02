@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Callable
+import smbus2 as smbus
 
 
 class SensorBrand(Enum):
@@ -31,10 +32,10 @@ class GenericSensor:
         self.min_delay: float = min_delay
         self.last_read: float = 0.
 
-    def init(self, write: Callable[[int, int], None]):
+    def init(self, bus: smbus.SMBus):
         ...
 
-    def read_value(self):
+    def measure_value(self, bus: smbus.SMBus):
         ...
 
     def __str__(self):

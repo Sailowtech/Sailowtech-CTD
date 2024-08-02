@@ -96,8 +96,12 @@ class DepthSensor(BlueRoboticsSensor):
 
         return True
 
+    def measure_value(self, bus: smbus.SMBus):
+        self.read(bus)
+        return self.depth()
+
     ###############################################################
-    # FULLY COPIED FROM BLUEROBOTICS's CODE, just some parameters adapted
+    # FULLY COPIED FROM BLUEROBOTICS's CODE, just some parameters adapted and "self."  added
     def read(self, bus: smbus.SMBus, oversampling=OSR_8192):
         if oversampling < self.OSR_256 or oversampling > self.OSR_8192:
             print("Invalid oversampling option!")
