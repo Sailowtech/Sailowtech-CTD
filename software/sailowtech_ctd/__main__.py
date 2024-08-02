@@ -8,9 +8,12 @@ For now, it supports I2C protocol but there should be more in the future.
 Credits for I2C protocol: "https://github.com/Atlas-Scientific/Raspberry-Pi-sample-code/blob/master/AtlasI2C.py"]
 Contact                 : "arthur.jacobs@sailowtech.ch"
 """
+import os
+import sys
 import time
 from pprint import pprint
 
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from software.sailowtech_ctd.types_.ctd import CTD
 
 # from software.sailowtech_ctd.types_.sensors.bluerobotics import BlueRoboticsSensor
