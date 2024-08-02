@@ -2,8 +2,8 @@ import time
 
 import smbus2 as smbus
 
-from sensors.bluerobotics import DepthSensor
-from sensors.generic import GenericSensor, SensorBrand
+from types_.sensors.bluerobotics import DepthSensor
+from types_.sensors.generic import GenericSensor, SensorBrand
 
 
 class TooShortInterval(Exception):
