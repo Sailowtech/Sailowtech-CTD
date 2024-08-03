@@ -61,9 +61,6 @@ class DepthSensor(BlueRoboticsSensor):
         CAL = auto()
         SLEEP = auto()
 
-    LONG_TIMEOUT_COMMANDS = (Commands.READ, Commands.CAL)
-    SLEEP_COMMANDS = (Commands.SLEEP,)
-
     def __init__(self, name: str, address: int = DEFAULT_ADDRESS, min_delay: float = 1):
         super().__init__(SensorType.DEPTH, name, address, min_delay)
         self._model = self.MODEL_30BA
@@ -98,7 +95,9 @@ class DepthSensor(BlueRoboticsSensor):
 
     def measure_value(self, bus: smbus.SMBus):
         self.read(bus)
-        return self.depth()
+        return {"pressure_mba": self.pressure(self.UNITS_mbar),
+                "calculated_depth": self.depth(),
+                "temp": self.temperature(self.UNITS_Centigrade)}
 
     ###############################################################
     # FULLY COPIED FROM BLUEROBOTICS's CODE, just some parameters adapted and "self."  added
