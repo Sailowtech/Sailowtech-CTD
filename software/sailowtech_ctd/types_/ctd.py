@@ -115,7 +115,10 @@ class CTD:
             print("Wait longer !")
             raise TooShortInterval()
 
-        print(f'Depth value: {self.DEFAULT_SENSORS[0].measure_value(self._bus)}')
+        depth_sensor_output = self.DEFAULT_SENSORS[0].measure_value(self._bus)
+        print(f'Depth value: {depth_sensor_output["calculated_depth"]}\n'
+              f'Pressure (mba) : {depth_sensor_output["pressure_mba"]}\n'
+              f'Temperature (C) : {depth_sensor_output["temp"]}\n')
         # results = dict()
         # for sensor in self.sensors:
         #     results[sensor.type] = self.measure(sensor)
