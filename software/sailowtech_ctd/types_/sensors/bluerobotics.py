@@ -6,10 +6,6 @@ from software.sailowtech_ctd.types_.sensors.generic import GenericSensor, Sensor
 
 
 class BlueRoboticsSensor(GenericSensor):
-    # the timeout needed to query readings and calibrations
-    LONG_TIMEOUT = 1.5
-    # timeout for regular commands
-    SHORT_TIMEOUT = .3
 
     def __init__(self, sensor_type: SensorType, name: str, address: int, min_delay: float = 1):
         super().__init__(SensorBrand.BlueRobotics, sensor_type, name, address, min_delay)
@@ -55,11 +51,6 @@ class DepthSensor(BlueRoboticsSensor):
     UNITS_Centigrade = 1
     UNITS_Farenheit = 2
     UNITS_Kelvin = 3
-
-    class Commands(Enum):
-        READ = auto()
-        CAL = auto()
-        SLEEP = auto()
 
     def __init__(self, name: str, address: int = DEFAULT_ADDRESS, min_delay: float = 1):
         super().__init__(SensorType.DEPTH, name, address, min_delay)
