@@ -1,3 +1,5 @@
+import csv
+import datetime
 import time
 
 import smbus2 as smbus
@@ -36,6 +38,10 @@ class CTD:
         self._min_delay: float = 3.
         self._last_measurement: float = 0.
 
+        self._data = []
+
+        self._activated: bool = False
+
         try:
             self._bus = smbus.SMBus(bus)
         except:
@@ -58,6 +64,10 @@ class CTD:
     @property
     def bluerobotics_sensors(self):
         return [sensor for sensor in self._sensors if sensor.brand == SensorBrand.BlueRobotics]
+
+    @property
+    def activated(self):
+        return self._activated
 
     # TODO : hardcoded for now
     # def load_config(self, config_path):
@@ -87,6 +97,8 @@ class CTD:
 
         # self._calibrate_atlas_sensors()
         # self._calibrate_bluerobotics_sensors()
+
+        self._activated = True
 
     def measure(self, sensor: GenericSensor):
         """
@@ -130,3 +142,24 @@ class CTD:
         # results = dict()
         # for sensor in self.sensors:
         #     results[sensor.type] = self.measure(sensor)
+
+    def export_csv(self, path: str):
+        fields = [DataFields.TIMESTAMP, DataFields.DATE,
+                  DataFields.PRESSURE_MBA, DataFields.DEPTH_METERS,
+                  DataFields.TEMPERATURE]
+
+        with open(path, 'w', newline='') as csvfile:
+            csvwriter = csv.DictWriter(csvfile, fieldnames=fields)
+
+            # Write the field names
+            csvwriter.writeheader()
+
+            # Write the data
+            csvwriter.writerows(self._data)
+
+    def check_for_stop_command(self, event):
+        """ Checks if a given key has been pressed. If so, deactivate CTD """
+
+        if event.name == 'A':
+            print("A pressed, stopping CTD !")
+            self._activated = False
