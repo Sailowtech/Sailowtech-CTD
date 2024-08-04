@@ -2,6 +2,7 @@ import time
 
 import smbus2 as smbus
 
+from software.sailowtech_ctd.types_.common import DataFields
 from software.sailowtech_ctd.types_.sensors.bluerobotics import DepthSensor
 from software.sailowtech_ctd.types_.sensors.generic import GenericSensor, SensorBrand
 
@@ -116,9 +117,16 @@ class CTD:
             raise TooShortInterval()
 
         depth_sensor_output = self.DEFAULT_SENSORS[0].measure_value(self._bus)
-        print(f'Depth value: {depth_sensor_output["calculated_depth"]}\n'
-              f'Pressure (mba) : {depth_sensor_output["pressure_mba"]}\n'
-              f'Temperature (C) : {depth_sensor_output["temp"]}\n')
+
+        now = datetime.datetime.now()
+
+        time_values = {DataFields.TIMESTAMP: now.timestamp(),
+                       DataFields.DATE: now.strftime("%Y-%m-%d %H:%M:%S")}
+
+        self._data.append(time_values | depth_sensor_output)
+        print(f'Depth value: {depth_sensor_output[DataFields.DEPTH_METERS]}\n'
+              f'Pressure (mba) : {depth_sensor_output[DataFields.PRESSURE_MBA]}\n'
+              f'Temperature (C) : {depth_sensor_output[DataFields.TEMPERATURE]}\n')
         # results = dict()
         # for sensor in self.sensors:
         #     results[sensor.type] = self.measure(sensor)

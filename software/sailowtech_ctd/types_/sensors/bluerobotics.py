@@ -1,7 +1,7 @@
-from enum import Enum, auto
 from time import sleep
 import smbus2 as smbus
 
+from software.sailowtech_ctd.types_.common import DataFields
 from software.sailowtech_ctd.types_.sensors.generic import GenericSensor, SensorType, SensorBrand
 
 
@@ -86,9 +86,9 @@ class DepthSensor(BlueRoboticsSensor):
 
     def measure_value(self, bus: smbus.SMBus):
         self.read(bus)
-        return {"pressure_mba": self.pressure(self.UNITS_mbar),
-                "calculated_depth": self.depth(),
-                "temp": self.temperature(self.UNITS_Centigrade)}
+        return {DataFields.PRESSURE_MBA: self.pressure(self.UNITS_mbar),
+                DataFields.DEPTH_METERS: self.depth(),
+                DataFields.TEMPERATURE: self.temperature(self.UNITS_Centigrade)}
 
     ###############################################################
     # FULLY COPIED FROM BLUEROBOTICS's CODE, just some parameters adapted and "self."  added

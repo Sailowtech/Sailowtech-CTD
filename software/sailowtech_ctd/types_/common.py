@@ -1,7 +1,7 @@
 from enum import StrEnum
 
 
-class ValueIDs(StrEnum):
+class DataFields(StrEnum):
     TIMESTAMP = "timestamp"
     DATE = "date"
     PRESSURE_MBA = "pressure (mba)"
