@@ -8,6 +8,7 @@ For now, it supports I2C protocol but there should be more in the future.
 Credits for I2C protocol: "https://github.com/Atlas-Scientific/Raspberry-Pi-sample-code/blob/master/AtlasI2C.py"]
 Contact                 : "arthur.jacobs@sailowtech.ch"
 """
+from datetime import datetime
 import time
 from pprint import pprint
 
@@ -25,9 +26,11 @@ if __name__ == '__main__':
     ctd.pressure_threshold = int(input("Threshold de coupure des mesures (mba)(généralement 200 à 500 mbars) : "))
 
     i = 0
-    while i < 1000 and ctd.activated:
+    while i < 30 and ctd.activated:
         ctd.measure_all()
         time.sleep(1)
         i += 1
 
-    ctd.export_csv('data.csv')
+    str_now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    ctd.export_csv(f'{str_now}_data.csv')
+    print("Exported csv, exiting program")
