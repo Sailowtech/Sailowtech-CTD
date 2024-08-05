@@ -11,8 +11,6 @@ Contact                 : "arthur.jacobs@sailowtech.ch"
 import time
 from pprint import pprint
 
-import keyboard
-
 from types_.ctd import CTD
 
 if __name__ == '__main__':
@@ -21,13 +19,11 @@ if __name__ == '__main__':
 
     pprint(ctd.sensors)
 
-    keyboard.hook(ctd.check_for_stop_command)
-
     # input("Appuyez sur Entrée pour procéder à la calibration des capteurs...\n")
     # ctd.calibrate_sensors()
 
     i = 0
-    while True and i < 1000 and ctd.activated:
+    while i < 1000 and ctd.activated:
         ctd.measure_all()
         time.sleep(1)
         i += 1

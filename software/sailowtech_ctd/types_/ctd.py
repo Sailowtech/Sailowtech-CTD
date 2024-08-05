@@ -156,10 +156,10 @@ class CTD:
 
             # Write the data
             csvwriter.writerows(self._data)
-
-    def check_for_stop_command(self, event):
-        """ Checks if a given key has been pressed. If so, deactivate CTD """
-
-        if event.name == 'A':
-            print("A pressed, stopping CTD !")
-            self._activated = False
+    #
+    # def check_for_stop_command(self, event):
+    #     """ Checks if a given key has been pressed. If so, deactivate CTD """
+    #
+    #     if event.name == 'A':
+    #         print("A pressed, stopping CTD !")
+    #         self._activated = False
