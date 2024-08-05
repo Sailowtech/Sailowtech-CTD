@@ -28,6 +28,8 @@ class CTD:
 
     MEASUREMENTS_INTERVAL = 1  # seconds
 
+    DEFAULT_THRESHOLD = 500  # By default, : 500mba (~5m of water)
+
     def __init__(self, config_path, bus=DEFAULT_BUS):
         self.name: str = ''
         # self.sensors_config: dict[str, dict[str, dict[str, str]]] = {}
@@ -41,6 +43,8 @@ class CTD:
         self._data = []
 
         self._activated: bool = False
+        self._max_pressure: float = 0.  # To stop program when lifting the CTD up
+        self._pressure_threshold: int = self.DEFAULT_THRESHOLD
 
         try:
             self._bus = smbus.SMBus(bus)
@@ -68,6 +72,15 @@ class CTD:
     @property
     def activated(self):
         return self._activated
+
+    @property
+    def pressure_threshold(self):
+        return self._pressure_threshold
+
+    @pressure_threshold.setter
+    def pressure_threshold(self, val):
+        self._pressure_threshold = (val if val else self.DEFAULT_THRESHOLD)
+        print(f"Threshold set to : {self._pressure_threshold} mba")
 
     # TODO : hardcoded for now
     # def load_config(self, config_path):
@@ -129,6 +142,12 @@ class CTD:
             raise TooShortInterval()
 
         depth_sensor_output = self.DEFAULT_SENSORS[0].measure_value(self._bus)
+
+        # Check for end of measurements (we stop when we go up enough)
+        if self._max_pressure - depth_sensor_output[DataFields.PRESSURE_MBA] >= self._pressure_threshold:
+            self._activated = False
+        else:
+            self._max_pressure = max(self._max_pressure, depth_sensor_output[DataFields.PRESSURE_MBA])
 
         now = datetime.datetime.now()
 

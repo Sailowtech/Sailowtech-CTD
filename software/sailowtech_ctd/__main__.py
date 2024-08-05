@@ -22,6 +22,8 @@ if __name__ == '__main__':
     # input("Appuyez sur Entrée pour procéder à la calibration des capteurs...\n")
     # ctd.calibrate_sensors()
 
+    ctd.pressure_threshold = int(input("Threshold de coupure des mesures (mba)(généralement 200 à 500 mbars) : "))
+
     i = 0
     while i < 1000 and ctd.activated:
         ctd.measure_all()
