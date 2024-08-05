@@ -9,6 +9,7 @@ Add `export PATH="/home/ctd/.local/bin:$PATH"` to your shell configuration file.
 Check install : poetry --version
 
 git clone https://github.com/Sailowtech/Sailowtech-CTD
+git pull
 
 poetry install
 
