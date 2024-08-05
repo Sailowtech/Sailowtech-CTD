@@ -30,9 +30,8 @@ class CTD:
 
     DEFAULT_THRESHOLD = 500  # By default, : 500mba (~5m of water)
 
-    def __init__(self, config_path, bus=DEFAULT_BUS):
+    def __init__(self, bus=DEFAULT_BUS):
         self.name: str = ''
-        # self.sensors_config: dict[str, dict[str, dict[str, str]]] = {}
         self._sensors: list[GenericSensor] = []
 
         # self.load_config(config_path)
@@ -82,23 +81,6 @@ class CTD:
         self._pressure_threshold = (val if val else self.DEFAULT_THRESHOLD)
         print(f"Threshold set to : {self._pressure_threshold} mba")
 
-    # TODO : hardcoded for now
-    # def load_config(self, config_path):
-    #     with open(config_path) as f:
-    #         config = yaml.load(f, Loader=yaml.FullLoader)
-    #
-    #     self.name = config["device"]
-    #     self.sensors_config = config["sensors"]
-    #     self.interval = config["measurements-interval"]
-
-    # def setup_sensors(self):
-    #     for atlas_sensors in self.sensors_config["atlas-sensors"].keys():
-    #         self.sensors.append(AtlasSensor(**self.sensors_config["atlas-sensors"][atlas_sensors]))
-    #
-    #     for blue_robotics_sensors in self.sensors_config["bluerobotics-sensors"].keys():
-    #         self.sensors.append(
-    #             BlueRoboticsSensor(**self.sensors_config["bluerobotics-sensors"][blue_robotics_sensors]))
-
     def setup_sensors(self):
         self.sensors = self.DEFAULT_SENSORS
 
@@ -113,28 +95,28 @@ class CTD:
 
         self._activated = True
 
-    def measure(self, sensor: GenericSensor):
-        """
-
-        :param sensor:
-        :return: None if error / not supported, float value instead
-        """
-
-        if time.time() - sensor.last_read < sensor.min_delay:
-            print(f"Sensor '{sensor.name}' needs to wait longer between measurements !")
-            raise TooShortInterval()
-
-        measurement: float = None
-        if sensor.brand == SensorBrand.BlueRobotics:
-            # Do something
-            pass
-        elif sensor.brand == SensorBrand.Atlas:
-            # Do something
-            pass
-        else:
-            print(f"Sensor brand '{sensor.brand}' not supported yet !")
-
-        return measurement
+    # def measure(self, sensor: GenericSensor):
+    #     """
+    #
+    #     :param sensor:
+    #     :return: None if error / not supported, float value instead
+    #     """
+    #
+    #     if time.time() - sensor.last_read < sensor.min_delay:
+    #         print(f"Sensor '{sensor.name}' needs to wait longer between measurements !")
+    #         raise TooShortInterval()
+    #
+    #     measurement: float = None
+    #     if sensor.brand == SensorBrand.BlueRobotics:
+    #         # Do something
+    #         pass
+    #     elif sensor.brand == SensorBrand.Atlas:
+    #         # Do something
+    #         pass
+    #     else:
+    #         print(f"Sensor brand '{sensor.brand}' not supported yet !")
+    #
+    #     return measurement
 
     def measure_all(self):
         if time.time() - self._last_measurement < self.MEASUREMENTS_INTERVAL:
@@ -159,9 +141,6 @@ class CTD:
         print(f'Depth value: {depth_sensor_output[DataFields.DEPTH_METERS]}\n'
               f'Pressure (mba) : {depth_sensor_output[DataFields.PRESSURE_MBA]}\n'
               f'Temperature (C) : {depth_sensor_output[DataFields.TEMPERATURE]}\n')
-        # results = dict()
-        # for sensor in self.sensors:
-        #     results[sensor.type] = self.measure(sensor)
 
     def export_csv(self, path: str):
         fields = [DataFields.TIMESTAMP, DataFields.DATE,
@@ -176,10 +155,3 @@ class CTD:
 
             # Write the data
             csvwriter.writerows(self._data)
-    #
-    # def check_for_stop_command(self, event):
-    #     """ Checks if a given key has been pressed. If so, deactivate CTD """
-    #
-    #     if event.name == 'A':
-    #         print("A pressed, stopping CTD !")
-    #         self._activated = False
