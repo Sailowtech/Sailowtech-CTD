@@ -146,6 +146,7 @@ class CTD:
         # Check for end of measurements (we stop when we go up enough)
         if self._max_pressure - depth_sensor_output[DataFields.PRESSURE_MBA] >= self._pressure_threshold:
             self._activated = False
+            print("Stopped because went up")
         else:
             self._max_pressure = max(self._max_pressure, depth_sensor_output[DataFields.PRESSURE_MBA])
 
