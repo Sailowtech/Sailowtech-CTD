@@ -5,8 +5,9 @@ import time
 import smbus2 as smbus
 
 from software.sailowtech_ctd.types_.common import DataFields
+from software.sailowtech_ctd.types_.sensors.atlas import AtlasSensor
 from software.sailowtech_ctd.types_.sensors.bluerobotics import DepthSensor
-from software.sailowtech_ctd.types_.sensors.generic import GenericSensor, SensorBrand
+from software.sailowtech_ctd.types_.sensors.generic import GenericSensor, SensorBrand, SensorType
 
 
 class TooShortInterval(Exception):
@@ -16,9 +17,9 @@ class TooShortInterval(Exception):
 class CTD:
     # I'm sorry for this. Hardcoding all the sensors.
     DEFAULT_SENSORS: list[GenericSensor] = [
-        # AtlasSensor(SensorType.DISSOLVED_OXY, "Dissolved Oxygen", 0x61),
-        # AtlasSensor(SensorType.CONDUCTIVITY, "Conductivity Probe", 0x64),
-        # AtlasSensor(SensorType.DISSOLVED_OXY_TEMP, "Temperature from Dissolved Oxygen Sensor", 0x66),
+        AtlasSensor(SensorType.DISSOLVED_OXY, "Dissolved Oxygen", 0x61),
+        AtlasSensor(SensorType.CONDUCTIVITY, "Conductivity Probe", 0x64),
+        AtlasSensor(SensorType.DISSOLVED_OXY_TEMP, "Temperature from Dissolved Oxygen Sensor", 0x66),
         DepthSensor("Depth Sensor", 0x76, min_delay=0.3),
     ]
 
