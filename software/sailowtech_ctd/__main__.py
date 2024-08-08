@@ -15,7 +15,7 @@ from pprint import pprint
 from types_.ctd import CTD
 
 if __name__ == '__main__':
-    ctd = CTD(config_path="config.yaml")
+    ctd = CTD()
     ctd.setup_sensors()
 
     pprint(ctd.sensors)
