@@ -7,29 +7,41 @@ After all, Open source CTD probes already exists ? Indeed, there are some great 
 
 ## Features 
 
-# TODO cleanup this
-
-Install poetry : https://python-poetry.org/docs/#installing-with-the-official-installer
-In home :
-curl -sSL https://install.python-poetry.org | python3 -
-Add `export PATH="/home/ctd/.local/bin:$PATH"` to your shell configuration file. (in ~/.bashrc, add to last line)
-Check install : poetry --version
-
-git clone https://github.com/Sailowtech/Sailowtech-CTD
-
-poetry install
-
-poetry run python software/sailowtech_ctd/__main__.py
-
 ## Use with Raspberry Pi Zero 2W
 
 ### Poetry for package dependencies
 
-To add a package, open a terminal and type
-`poetry add <package>`
+Okay this is awesome, trust me.  
+Yes, it's a bit like firing a bazooka to kill mosquitoes (© Alexandre pour l'expression), but it's worth it.
 
-To build the requirement file, open a terminal and type
-`poetry export --without-hashes --format=requirements.txt > ./software/ctd-collector/requirements.txt`
+Quick recap: Poetry is a **packaging** and **dependency** management tool. It uses/creates **virtualenvs** to manage
+said
+packages.
+
+#### Poetry installation
+
+- Follow this: https://python-poetry.org/docs/#installing-with-the-official-installer
+- Add `export PATH="/home/ctd/.local/bin:$PATH"` to your shell configuration file. (in `~/.bashrc`, add to last line)
+- Check installation: `poetry --version` (you may need to reboot for this to work)
+
+#### Poetry use
+
+Poetry works this way (simplified, see [this](https://python-poetry.org/docs/basic-usage/)):
+
+- Create a project: `poetry new <project_name>` (or `poetry init` if directory is already created)
+- A `pyproject.toml` file will be created. It contains all the dependencies needed for the project.
+- To add a dependency: `poetry add <package>`
+- To install all dependencies: `poetry install`. This will create a `poetry.lock` file (if non-existent), locking all
+  the libs and their versions. This file **should be added to git**!
+
+In our case, you should:
+
+- `git clone https://github.com/Sailowtech/Sailowtech-CTD` (or git pull)
+- `poetry install`
+
+Finally, to run the project in our environment:
+
+- `poetry run python software/sailowtech_ctd/__main__.py`
 
 ### OS Setup
 
