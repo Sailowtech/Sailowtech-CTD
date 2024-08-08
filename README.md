@@ -1,4 +1,11 @@
 # Sailowtech CTD
+Welcome on the repository of the Sailowtech CTD Project, an affordable and open-source CTD probe tailored for scientific expeditions.
+## Why this project exist ?
+After all, Open source CTD probes already exists ? Indeed, there are some great projects like [Open CTD](https://github.com/OceanographyforEveryone/OpenCTD "Open CTD Project") or [CTDizzle](https://github.com/IanTBlack/CTDizzle/tree/main "CTDIzzle Project") but we wanted something more tailored for mid to long term expeditions while allowing a modularity in the embedded sensors. Therefore we aim to developp a project around a main electronic core and auxiliary cards that can be swapped depending on the research interest. For the moment, we propose a core based on a Rasperry pi Zero W and an auxilliary cards for 2 Atlas Scientific Sensors (Conductivity, Temperature, Dissolved Oxygen, pH...).
+
+## Sailowtech
+
+## Features 
 
 # TODO cleanup this
 
