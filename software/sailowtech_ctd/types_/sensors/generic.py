@@ -34,7 +34,7 @@ class GenericSensor:
     def init(self, bus: smbus.SMBus):
         ...
 
-    def calibrate(self):
+    def calibrate(self, bus: smbus.SMBus):
         ...
 
     def measure_value(self, bus: smbus.SMBus):
