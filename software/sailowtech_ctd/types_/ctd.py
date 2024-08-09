@@ -127,7 +127,7 @@ class CTD:
         depth_sensor_output = self.DEFAULT_SENSORS[0].measure_value(self._bus)
 
         for i in range(3):  # Test Read Atlas
-            self.DEFAULT_SENSORS[i + 1].measure_value(self._bus)
+            print(self.DEFAULT_SENSORS[i + 1].measure_value(self._bus))
 
         # Check for end of measurements (we stop when we go up enough)
         if self._max_pressure - depth_sensor_output[DataFields.PRESSURE_MBA] >= self._pressure_threshold:
