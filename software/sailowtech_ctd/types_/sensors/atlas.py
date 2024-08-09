@@ -32,7 +32,8 @@ class AtlasSensor(GenericSensor):
         self._query(bus, self.Commands.CAL)
 
     def measure_value(self, bus: smbus.SMBus):
-        self._read(bus)
+        print("Measuring atlas x...")
+        return self._query(bus, self.Commands.READ)
 
     ###############################################################
     # ADAPTED FROM ATLAS's CODE
@@ -63,7 +64,7 @@ class AtlasSensor(GenericSensor):
         '''
         reads a specified number of bytes from I2C, then parses and displays the result
         '''
-
+        bus.write_byte(self.addr, ord(self.Commands.READ))
         response = bus.read_i2c_block_data(self.addr, self.DEFAULT_REG, num_of_bytes)
         # print(response)
         is_valid, error_code = self.response_valid(response=response)
@@ -96,12 +97,12 @@ class AtlasSensor(GenericSensor):
         and read the response
         """
         self._write(bus, command)
-        current_timeout = self._get_command_timeout(command=command)
-        if not current_timeout:
-            return "sleep mode"
-        else:
-            time.sleep(current_timeout)
-            return self._read(bus=bus)
+        # current_timeout = self._get_command_timeout(command=command)
+        # if not current_timeout:
+        #     return "sleep mode"
+        # else:
+        #     time.sleep(current_timeout)
+        return self._read(bus=bus)
 
     # def list_i2c_devices(self):  # Useless ?
     #     '''

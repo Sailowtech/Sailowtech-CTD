@@ -17,10 +17,10 @@ class TooShortInterval(Exception):
 class CTD:
     # I'm sorry for this. Hardcoding all the sensors.
     DEFAULT_SENSORS: list[GenericSensor] = [
+        DepthSensor("Depth Sensor", 0x76, min_delay=0.3),
         AtlasSensor(SensorType.DISSOLVED_OXY, "Dissolved Oxygen", 0x61),
         AtlasSensor(SensorType.CONDUCTIVITY, "Conductivity Probe", 0x64),
         AtlasSensor(SensorType.DISSOLVED_OXY_TEMP, "Temperature from Dissolved Oxygen Sensor", 0x66),
-        DepthSensor("Depth Sensor", 0x76, min_delay=0.3),
     ]
 
     # the default bus for I2C on the newer Raspberry Pis,
@@ -127,7 +127,7 @@ class CTD:
         depth_sensor_output = self.DEFAULT_SENSORS[0].measure_value(self._bus)
 
         for i in range(3):  # Test Read Atlas
-            self.DEFAULT_SENSORS[i + 1].measure_value(self._bus)
+            print(self.DEFAULT_SENSORS[i + 1].measure_value(self._bus))
 
         # Check for end of measurements (we stop when we go up enough)
         if self._max_pressure - depth_sensor_output[DataFields.PRESSURE_MBA] >= self._pressure_threshold:
