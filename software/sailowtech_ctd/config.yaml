@@ -1,17 +1,20 @@
-device: Sailow CTD
+device: Sailowtech CTD
 sensors:
-  atlas-sensors:
-    dissolved-oxygen:
-      name: "Dissolved Oxygen"
-      address: 0x61
-    conductivity:
-      name: "Conductivity Probe"
-      address: 0x64
-    temperature-do:
-      name: "Temperature from Dissolved Oxygen Sensor"
-      address: 0x66
-  bluerobotics-sensors:
-    depth:
-      name: "Depth Sensor"
-      address: 0x76
+  dissolved-oxygen:
+    name: "Dissolved Oxygen"
+    address: 0x61
+    sensor-type: "DISSOLVED_OXY"
+  conductivity:
+    name: "Conductivity Probe"
+    address: 0x64
+    sensor-type: "CONDUCTIVITY"
+  temperature-do:
+    name: "Temperature from Dissolved Oxygen Sensor"
+    address: 0x66
+    sensor-type: "DISSOLVED_OXY_TEMP"
+  depth:
+    name: "Depth Sensor"
+    address: 0x76
+    sensor-type: "DEPTH"
 measurements-interval: 1 # seconds
+write-sql: true

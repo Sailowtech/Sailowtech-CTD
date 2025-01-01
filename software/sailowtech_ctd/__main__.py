@@ -12,11 +12,11 @@ from datetime import datetime
 import time
 from pprint import pprint
 
-from types_.ctd import CTD
+from types.ctd import CTD
 
 if __name__ == '__main__':
     ctd = CTD()
-    ctd.setup_sensors()
+    #ctd.setup_sensors()
 
     pprint(ctd.sensors)
 
@@ -24,7 +24,7 @@ if __name__ == '__main__':
     # ctd.calibrate_sensors()
 
     ctd.pressure_threshold = int(input("Threshold de coupure des mesures (mba)(généralement 200 à 500 mbars) : "))
-
+    ctd.measure_all()
     i = 0
     while i < 30 and ctd.activated:
         ctd.measure_all()

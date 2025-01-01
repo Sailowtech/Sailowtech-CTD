@@ -4,10 +4,10 @@ import time
 
 import smbus2 as smbus
 
-from software.sailowtech_ctd.types_.common import DataFields
-from software.sailowtech_ctd.types_.sensors.atlas import AtlasSensor
-from software.sailowtech_ctd.types_.sensors.bluerobotics import DepthSensor
-from software.sailowtech_ctd.types_.sensors.generic import GenericSensor, SensorBrand, SensorType
+from software.sailowtech_ctd.types.common import DataFields, OutputTypes
+from software.sailowtech_ctd.types.sensors.atlas import AtlasSensor
+from software.sailowtech_ctd.types.sensors.bluerobotics import DepthSensor
+from software.sailowtech_ctd.types.sensors.generic import GenericSensor, SensorBrand, SensorType
 
 
 class TooShortInterval(Exception):
@@ -31,7 +31,9 @@ class CTD:
 
     DEFAULT_THRESHOLD = 500  # By default, : 500mba (~5m of water)
 
-    def __init__(self, bus=DEFAULT_BUS):
+    def __init__(self, bus=DEFAULT_BUS, output: OutputTypes=OutputTypes.SQL, useConfig: bool = True):
+
+        self.output: OutputTypes = OutputTypes.SQL
         self.name: str = ''
         self._sensors: list[GenericSensor] = []
 
@@ -120,6 +122,10 @@ class CTD:
     #     return measurement
 
     def measure_all(self):
+
+        print(self.output)
+
+
         if time.time() - self._last_measurement < self.MEASUREMENTS_INTERVAL:
             print("Wait longer !")
             raise TooShortInterval()

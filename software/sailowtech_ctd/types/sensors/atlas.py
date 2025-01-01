@@ -3,7 +3,7 @@ from enum import StrEnum
 
 import smbus2 as smbus
 
-from software.sailowtech_ctd.types_.sensors.generic import GenericSensor, SensorType, SensorBrand
+from software.sailowtech_ctd.types.sensors.generic import GenericSensor, SensorType, SensorBrand
 
 
 class AtlasSensor(GenericSensor):
