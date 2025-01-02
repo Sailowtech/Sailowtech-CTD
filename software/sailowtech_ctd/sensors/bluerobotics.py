@@ -1,8 +1,8 @@
 from time import sleep
 import smbus2 as smbus
 
-from software.sailowtech_ctd.types.common import DataFields
-from software.sailowtech_ctd.types.sensors.generic import GenericSensor, SensorType, SensorBrand
+from software.sailowtech_ctd.common import DataFields
+from software.sailowtech_ctd.sensors.generic import GenericSensor, SensorType, SensorBrand
 
 
 class BlueRoboticsSensor(GenericSensor):

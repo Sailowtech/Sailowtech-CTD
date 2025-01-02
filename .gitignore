@@ -1,2 +1,4 @@
 **/ms5837.py
 .idea
+*.sqlite
+*.csv

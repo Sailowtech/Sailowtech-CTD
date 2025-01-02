@@ -4,10 +4,10 @@ import time
 
 import smbus2 as smbus
 
-from software.sailowtech_ctd.types.common import DataFields, OutputTypes
-from software.sailowtech_ctd.types.sensors.atlas import AtlasSensor
-from software.sailowtech_ctd.types.sensors.bluerobotics import DepthSensor
-from software.sailowtech_ctd.types.sensors.generic import GenericSensor, SensorBrand, SensorType
+from software.sailowtech_ctd.common import DataFields, OutputTypes
+from software.sailowtech_ctd.sensors.atlas import AtlasSensor
+from software.sailowtech_ctd.sensors.bluerobotics import DepthSensor
+from software.sailowtech_ctd.sensors.generic import GenericSensor, SensorBrand, SensorType
 
 
 class TooShortInterval(Exception):
@@ -54,6 +54,11 @@ class CTD:
             print("Bus %d is not available." % bus)
             print("Available busses are listed as /dev/i2c*")
             self._bus = None
+
+    @property
+    def is_bus_connected(self) -> bool:
+        """Indicates if the object has a I2C-Bus connected"""
+        return self._bus is not None
 
     @property
     def sensors(self):

@@ -15,6 +15,6 @@ sensors:
   depth:
     name: "Depth Sensor"
     address: 0x76
-    sensor-type: "DEPTH"
+    sensor-type: "BAR30_DEPTH"
 measurements-interval: 1 # seconds
 write-sql: true

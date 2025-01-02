@@ -11,11 +11,15 @@ Contact                 : "arthur.jacobs@sailowtech.ch"
 from datetime import datetime
 import time
 from pprint import pprint
+from software.sailowtech_ctd.database import db
+from software.sailowtech_ctd.ctd import CTD
 
-from types.ctd import CTD
+db_params = {'provider': 'sqlite', 'filename': 'debug.sqlite', 'create_db': True}
 
 if __name__ == '__main__':
     ctd = CTD()
+    db.bind(**db_params)
+    db.generate_mapping(create_tables=True)
     #ctd.setup_sensors()
 
     pprint(ctd.sensors)
@@ -24,9 +28,12 @@ if __name__ == '__main__':
     # ctd.calibrate_sensors()
 
     ctd.pressure_threshold = int(input("Threshold de coupure des mesures (mba)(généralement 200 à 500 mbars) : "))
-    ctd.measure_all()
+    if ctd.is_bus_connected:
+        ctd.measure_all()
+    else:
+        print("i2C Bus not connected!")
     i = 0
-    while i < 30 and ctd.activated:
+    while i < 30 and ctd.activated and ctd.is_bus_connected:
         ctd.measure_all()
         time.sleep(1)
         i += 1
