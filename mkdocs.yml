@@ -1,7 +1,8 @@
 site_name: Sailowtech-CTD Documentation
+theme:
+  name: material
 plugins:
 - mkdocstrings:
     handlers:
       python:
-        options:
-          docstring_style: google
+        paths: [software]
