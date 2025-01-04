@@ -1,0 +1,26 @@
+name: Build Raspberry PI Image
+
+on:
+  push:
+    branches:
+      - image-build
+
+jobs:
+  translations:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Install dependencies for pi-gen
+        run: sudo apt-get install coreutils quilt parted qemu-user-static debootstrap zerofree zip dosfstools libarchive-tools libcap2-bin grep rsync xz-utils file git curl bc gpg pigz xxd arch-test
+      - name: Checkout pi-gen repository
+        uses: actions/checkout@v4
+        with:
+          repository: RPi-Distro/pi-gen
+          path: pi-gen
+          ref: arm64
+          submodules: true
+      - name: List files
+        run: ls; tree
