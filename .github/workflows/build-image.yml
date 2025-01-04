@@ -6,7 +6,7 @@ on:
       - image-build
 
 jobs:
-  translations:
+  build-image:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout current repository
@@ -25,7 +25,7 @@ jobs:
       - name: Skip stages that are not required
         run: touch pi-gen/stage3/SKIP pi-gen/stage4/SKIP pi-gen/stage5/SKIP pi-gen/stage4/SKIP_IMAGES pi-gen/stage5/SKIP_IMAGES
       - name: Make stage file executable
-        run: chmod +x os/ctd-stage/00-install-ctd-software/00-run.sh os/ctd-stage/prerun.sh
+        run: chmod +x os/ctd-stage/00-install-ctd-software/00-run-chroot.sh os/ctd-stage/prerun.sh
       - name: List files
         run: tree
       - name: Build the Image
