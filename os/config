@@ -1,0 +1,6 @@
+IMG_NAME=sailowtech_ctd
+TARGET_HOSTNAME=sailowtech-ctd.local
+TIMEZONE_DEFAULT=Europe/Vaduz
+FIRST_USER_NAME=ctd
+WPA_COUNTRY=CH
+ENABLE_SSH=1
