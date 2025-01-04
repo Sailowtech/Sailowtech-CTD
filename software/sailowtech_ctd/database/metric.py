@@ -1,6 +1,9 @@
+from pony.orm import Required, Set
+
 from .base import db
 
 class Metric(db.Entity):
-    name: str
-    unit: str
+    name = Required(str)
+    unit = Required(str)
+    measurements = Set("Measurement")
 

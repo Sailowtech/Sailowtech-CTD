@@ -14,7 +14,7 @@ A **measurement** is a datapoint with the value of a *metric* which was measured
 
 ## Sensor
 
-A **sensor** is a physical device which is installed on the CTD. It takes measurements of metrics. 
+A **sensor** is a physical device which is installed on the CTD. It takes measurements of a metric. Note that even though some devices take measures of multiple metrics, we abstract it to one metric per device. 
 
 ## Correlation Data
 

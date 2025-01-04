@@ -1,29 +1,19 @@
 from enum import Enum, auto
 
 import smbus2 as smbus
-
+from .types import Sensor
 
 class SensorBrand(Enum):
     Atlas = auto()
     BlueRobotics = auto()
 
-
-class SensorType(Enum):
-    # Atlas
-    DISSOLVED_OXY = auto()
-    CONDUCTIVITY = auto()
-    DISSOLVED_OXY_TEMP = auto()
-    # Blue robotics
-    DEPTH = auto()
-
-
 class GenericSensor:
     class Commands(Enum):
         ...
 
-    def __init__(self, brand: SensorBrand, sensor_type: SensorType, name: str, address: int, min_delay: float = 1):
+    def __init__(self, brand: SensorBrand, sensor_type: Sensor, name: str, address: int, min_delay: float = 1):
         self.brand: SensorBrand = brand
-        self.sensor_type: SensorType = sensor_type
+        self.sensor_type: Sensor = sensor_type
 
         self.name: str = name
         self.addr: int = address

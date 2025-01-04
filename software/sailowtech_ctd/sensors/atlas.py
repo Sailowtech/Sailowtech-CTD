@@ -2,7 +2,17 @@ from enum import StrEnum
 
 import smbus2 as smbus
 
-from software.sailowtech_ctd.sensors.generic import GenericSensor, SensorType, SensorBrand
+from software.sailowtech_ctd.sensors.generic import GenericSensor, SensorBrand
+from .types import Sensor
+
+def handle_raspi_glitch(response):  # Maybe useless when using smbus ?
+    """
+    Change MSB to 0 for all received characters except the first
+    and get a list of characters
+    NOTE: having to change the MSB to 0 is a glitch in the raspberry pi,
+    and you shouldn't have to do this!
+    """
+    return list(map(lambda x: chr(x & ~0x80), list(response)))
 
 
 class AtlasSensor(GenericSensor):
@@ -21,8 +31,8 @@ class AtlasSensor(GenericSensor):
 
     DEFAULT_REG = 0x00  # Maybe wrong ???
 
-    def __init__(self, sensor_type: SensorType, name: str, address: int, min_delay: float = 1):
-        super().__init__(SensorBrand.Atlas, sensor_type, name, address, min_delay)
+    def __init__(self, sensor: Sensor, name: str, address: int, min_delay: float = 1):
+        super().__init__(SensorBrand.Atlas, sensor, name, address, min_delay)
 
     def init(self, bus: smbus.SMBus):
         self.calibrate(bus)
@@ -36,14 +46,6 @@ class AtlasSensor(GenericSensor):
 
     ###############################################################
     # ADAPTED FROM ATLAS's CODE
-    def handle_raspi_glitch(self, response):  # Maybe useless when using smbus ?
-        '''
-        Change MSB to 0 for all received characters except the first
-        and get a list of characters
-        NOTE: having to change the MSB to 0 is a glitch in the raspberry pi,
-        and you shouldn't have to do this!
-        '''
-        return list(map(lambda x: chr(x & ~0x80), list(response)))
 
     def response_valid(self, response):
         valid = True
@@ -60,16 +62,16 @@ class AtlasSensor(GenericSensor):
         return str(self.addr) + " " + self.name
 
     def _read(self, bus: smbus.SMBus, num_of_bytes=31):
-        '''
+        """
         reads a specified number of bytes from I2C, then parses and displays the result
-        '''
+        """
         bus.write_byte(self.addr, ord(self.Commands.READ))
         response = bus.read_i2c_block_data(self.addr, self.DEFAULT_REG, num_of_bytes)
         # print(response)
         is_valid, error_code = self.response_valid(response=response)
 
         if is_valid:
-            char_list = self.handle_raspi_glitch(response[1:])
+            char_list = handle_raspi_glitch(response[1:])
             result = "Success " + self.get_device_info() + ": " + str(''.join(char_list))
             # result = "Success: " +  str(''.join(char_list))
         else:

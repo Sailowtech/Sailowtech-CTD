@@ -1,10 +1,9 @@
-from pony.orm import Set
+from pony.orm import Set, Required
 
 from .base import db
-from .metric import Metric
-from ..sensors.types import SensorTypes
+from software.sailowtech_ctd.sensors.types import Sensor
 
 class Sensor(db.Entity):
-    name: str
-    metrics: Set(Metric)
-    device: SensorTypes
+    name = Required(str)
+    device = Required(Sensor)
+    measurements = Set("Measurement")

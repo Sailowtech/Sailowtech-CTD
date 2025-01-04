@@ -3,18 +3,18 @@ sensors:
   dissolved-oxygen:
     name: "Dissolved Oxygen"
     address: 0x61
-    sensor-type: "DISSOLVED_OXY"
+    sensor-type: "ATLAS_EZO_DO"
   conductivity:
     name: "Conductivity Probe"
     address: 0x64
-    sensor-type: "CONDUCTIVITY"
+    sensor-type: "ATLAS_EZO_CONDUCTIVITY"
   temperature-do:
-    name: "Temperature from Dissolved Oxygen Sensor"
+    name: "Temperature (DO Sensor)"
     address: 0x66
-    sensor-type: "DISSOLVED_OXY_TEMP"
+    sensor-type: "ATLAS_EZO_TEMP"
   depth:
     name: "Depth Sensor"
     address: 0x76
-    sensor-type: "BAR30_DEPTH"
+    sensor-type: "BLUEROBOTICS_BAR30_DEPTH"
 measurements-interval: 1 # seconds
 write-sql: true
