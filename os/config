@@ -2,5 +2,7 @@ IMG_NAME=sailowtech_ctd
 TARGET_HOSTNAME=sailowtech-ctd.local
 TIMEZONE_DEFAULT=Europe/Vaduz
 FIRST_USER_NAME=ctd
+FIRST_USER_PASS=ctd
 WPA_COUNTRY=CH
 ENABLE_SSH=1
+STAGE_LIST="stage0 stage1 stage2 ctd-stage"
