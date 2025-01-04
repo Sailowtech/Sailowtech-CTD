@@ -5,4 +5,4 @@ FIRST_USER_NAME=ctd
 FIRST_USER_PASS=ctd
 WPA_COUNTRY=CH
 ENABLE_SSH=1
-STAGE_LIST="stage0 stage1 stage2 ctd-stage"
+STAGE_LIST="pi-gen/stage0 pi-gen/stage1 pi-gen/stage2 os/ctd-stage"
