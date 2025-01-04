@@ -25,6 +25,6 @@ jobs:
       - name: Skip stages that are not required
         run: touch pi-gen/stage3/SKIP pi-gen/stage4/SKIP pi-gen/stage5/SKIP pi-gen/stage4/SKIP_IMAGES pi-gen/stage5/SKIP_IMAGES
       - name: Build the Image
-        run: pi-gen/build.sh -c os/config
+        run: sudo pi-gen/build.sh -c os/config
       - name: List files
         run: ls -la pi-gen/deploy; tree
