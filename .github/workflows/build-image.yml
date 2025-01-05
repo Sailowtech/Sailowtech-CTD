@@ -22,9 +22,11 @@ jobs:
           path: pi-gen
           ref: arm64
           submodules: true
-      - name: Skip stages that are not required
+      - name: Add config to skip stages that are not required
         run: touch pi-gen/stage3/SKIP pi-gen/stage4/SKIP pi-gen/stage5/SKIP pi-gen/stage4/SKIP_IMAGES pi-gen/stage5/SKIP_IMAGES
-      - name: Make stage file executable
+      - name: Add config to not export stage2 as image
+        run: rm pi-gen/stage2/EXPORT_IMAGE
+      - name: Make ctd-stage scripts executable
         run: chmod +x os/ctd-stage/00-install-ctd-software/00-run-chroot.sh os/ctd-stage/01-setup-networks/00-run-chroot.sh os/ctd-stage/prerun.sh
       - name: List files
         run: tree
