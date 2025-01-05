@@ -1,3 +1,7 @@
 #!/bin/bash -e
 
-sudo wpa_passphrase "CTD" "CTDCTDCTD" | sudo tee -a /etc/wpa_supplicant/wpa_supplicant.conf
+sudo systemctl disable wpa_supplicant
+sudo systemctl enable NetworkManager.service
+sudo cat /etc/network/interfaces || true
+nmcli device wifi connect CTD password CTDCTDCTD || true
+sudo ls /etc/NetworkManager/system-connections/ || true
