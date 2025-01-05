@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-image:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout current repository
         uses: actions/checkout@v4
@@ -25,7 +25,7 @@ jobs:
       - name: Skip stages that are not required
         run: touch pi-gen/stage3/SKIP pi-gen/stage4/SKIP pi-gen/stage5/SKIP pi-gen/stage4/SKIP_IMAGES pi-gen/stage5/SKIP_IMAGES
       - name: Make stage file executable
-        run: chmod +x os/ctd-stage/00-install-ctd-software/00-run-chroot.sh os/ctd-stage/prerun.sh
+        run: chmod +x os/ctd-stage/00-install-ctd-software/00-run-chroot.sh os/ctd-stage/01-setup-networks/00-run-chroot.sh os/ctd-stage/prerun.sh
       - name: List files
         run: tree
       - name: Build the Image
