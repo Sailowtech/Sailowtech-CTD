@@ -3,6 +3,7 @@ TARGET_HOSTNAME=sailowtech-ctd.local
 TIMEZONE_DEFAULT=Europe/Vaduz
 FIRST_USER_NAME=ctd
 FIRST_USER_PASS=ctd
+DISABLE_FIRST_BOOT_USER_RENAME=1
 WPA_COUNTRY=CH
 ENABLE_SSH=1
 STAGE_LIST="pi-gen/stage0 pi-gen/stage1 pi-gen/stage2 os/ctd-stage"
