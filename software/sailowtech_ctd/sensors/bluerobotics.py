@@ -2,13 +2,14 @@ from time import sleep
 import smbus2 as smbus
 
 from software.sailowtech_ctd.common import DataFields
-from software.sailowtech_ctd.sensors.generic import GenericSensor, SensorType, SensorBrand
+from software.sailowtech_ctd.sensors.generic import GenericSensor, SensorBrand
+from .types import Sensor
 
 
 class BlueRoboticsSensor(GenericSensor):
 
-    def __init__(self, sensor_type: SensorType, name: str, address: int, min_delay: float = 1):
-        super().__init__(SensorBrand.BlueRobotics, sensor_type, name, address, min_delay)
+    def __init__(self, sensor: Sensor, name: str, address: int, min_delay: float = 1):
+        super().__init__(SensorBrand.BlueRobotics, sensor, name, address, min_delay)
 
 
 class DepthSensor(BlueRoboticsSensor):
@@ -49,11 +50,11 @@ class DepthSensor(BlueRoboticsSensor):
 
     # Valid units
     UNITS_Centigrade = 1
-    UNITS_Farenheit = 2
+    UNITS_Fahrenheit = 2
     UNITS_Kelvin = 3
 
     def __init__(self, name: str, address: int = DEFAULT_ADDRESS, min_delay: float = 1):
-        super().__init__(SensorType.DEPTH, name, address, min_delay)
+        super().__init__(Sensor.BLUEROBOTICS_BAR30_DEPTH, name, address, min_delay)
         self._model = self.MODEL_30BA
         self._C = []
 
@@ -123,7 +124,7 @@ class DepthSensor(BlueRoboticsSensor):
 
         return True
 
-    def setFluidDensity(self, density):
+    def set_fluid_density(self, density):
         self._fluidDensity = density
 
     # Pressure in requested units
@@ -135,7 +136,7 @@ class DepthSensor(BlueRoboticsSensor):
     # default degrees C
     def temperature(self, conversion=UNITS_Centigrade):
         degC = self._temperature / 100.0
-        if conversion == self.UNITS_Farenheit:
+        if conversion == self.UNITS_Fahrenheit:
             return (9.0 / 5.0) * degC + 32
         elif conversion == self.UNITS_Kelvin:
             return degC + 273

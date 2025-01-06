@@ -11,8 +11,15 @@ Contact                 : "arthur.jacobs@sailowtech.ch"
 from datetime import datetime
 import time
 from pprint import pprint
-from software.sailowtech_ctd.database import db
-from software.sailowtech_ctd.ctd import CTD
+
+from pony.orm import commit, db_session
+
+from database import db
+from database.metric import Metric
+from database.sensor import Sensor
+from database.measurement import Measurement
+from ctd import CTD
+from sensors.types import Sensor as SensorType
 
 db_params = {'provider': 'sqlite', 'filename': 'debug.sqlite', 'create_db': True}
 
@@ -20,6 +27,10 @@ if __name__ == '__main__':
     ctd = CTD()
     db.bind(**db_params)
     db.generate_mapping(create_tables=True)
+    with db_session:
+        m1 = Metric(name="temperature", unit="Celsius")
+        s1 = Sensor(name="test-sensor", device=SensorType.ATLAS_EZO_DO)
+
     #ctd.setup_sensors()
 
     pprint(ctd.sensors)

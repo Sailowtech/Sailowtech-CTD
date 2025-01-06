@@ -1,5 +1,6 @@
 #!/bin/bash -e
 
+
 pipx install poetry
 pipx ensurepath
 git clone https://github.com/Sailowtech/Sailowtech-CTD.git /home/ctd/Sailowtech-CTD

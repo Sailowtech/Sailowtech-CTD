@@ -7,7 +7,9 @@ import smbus2 as smbus
 from software.sailowtech_ctd.common import DataFields, OutputTypes
 from software.sailowtech_ctd.sensors.atlas import AtlasSensor
 from software.sailowtech_ctd.sensors.bluerobotics import DepthSensor
-from software.sailowtech_ctd.sensors.generic import GenericSensor, SensorBrand, SensorType
+from software.sailowtech_ctd.sensors.generic import GenericSensor, SensorBrand
+
+from sensors.types import Sensor
 
 
 class TooShortInterval(Exception):
@@ -18,9 +20,9 @@ class CTD:
     # I'm sorry for this. Hardcoding all the sensors.
     DEFAULT_SENSORS: list[GenericSensor] = [
         DepthSensor("Depth Sensor", 0x76, min_delay=0.3),
-        AtlasSensor(SensorType.DISSOLVED_OXY, "Dissolved Oxygen", 0x61),
-        AtlasSensor(SensorType.CONDUCTIVITY, "Conductivity Probe", 0x64),
-        AtlasSensor(SensorType.DISSOLVED_OXY_TEMP, "Temperature from Dissolved Oxygen Sensor", 0x66),
+        AtlasSensor(Sensor.ATLAS_EZO_DO, "Dissolved Oxygen", 0x61),
+        AtlasSensor(Sensor.ATLAS_EZO_CONDUCTIVITY, "Conductivity Probe", 0x64),
+        AtlasSensor(Sensor.ATLAS_EZO_TEMP, "Temperature from Dissolved Oxygen Sensor", 0x66),
     ]
 
     # the default bus for I2C on the newer Raspberry Pis,
@@ -62,10 +64,12 @@ class CTD:
 
     @property
     def sensors(self):
+        """Return the list of all the sensors that have been configured"""
         return self._sensors
 
     @sensors.setter
     def sensors(self, val):
+        """Set a new list of configured sensors"""
         self._sensors = val
 
     @property
