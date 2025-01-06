@@ -2,8 +2,8 @@ name: Build Raspberry PI Image
 
 on:
   push:
-    branches:
-      - image-build
+    tags:
+      - v*.*.*
 
 jobs:
   build-image:
@@ -39,3 +39,7 @@ jobs:
           if-no-files-found: error
           overwrite: true
           path: pi-gen/deploy/*
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: pi-gen/deploy/*
