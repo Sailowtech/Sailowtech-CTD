@@ -2,6 +2,7 @@ site_name: Sailowtech-CTD Documentation
 theme:
   name: material
 plugins:
+- awesome-pages:
 - mkdocstrings:
     handlers:
       python:

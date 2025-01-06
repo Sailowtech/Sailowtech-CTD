@@ -1,3 +1,3 @@
-# Building the CTD Raspbian Image
+# Self-Building Image
 
 The image is built automatically on GitHub.
