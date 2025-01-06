@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - v*.*.*
-      -
+
 permissions:
   contents: write
 
@@ -31,8 +31,8 @@ jobs:
         run: rm pi-gen/stage2/EXPORT_IMAGE
       - name: Make ctd-stage scripts executable
         run: chmod +x os/ctd-stage/00-install-ctd-software/00-run-chroot.sh os/ctd-stage/01-setup-networks/00-run-chroot.sh os/ctd-stage/02-enable-i2c/00-run-chroot.sh os/ctd-stage/prerun.sh
-      - name: List files
-        run: tree
+      - name: Add archive name from config
+        run: echo "ARCHIVE_FILENAME=sailowtech-ctd-${{ github.ref_name }}" >> os/config
       - name: Build the Image
         run: sudo pi-gen/build.sh -c os/config
       - name: Upload the built image as build artifact
