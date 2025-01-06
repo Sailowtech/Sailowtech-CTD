@@ -8,4 +8,4 @@ After all, Open Source CTD probes already exist? Indeed, there are some great pr
 If you encounter any issues, please use the Issue tracker on GitHub. Please note that this project is still in the development phase and currently undergoing testing.
 
 ## Full documentation
-The full documentation is accessible under [https://github.com/Sailowtech/Sailowtech-CTD/](https://github.com/Sailowtech/Sailowtech-CTD/)
+The full documentation is accessible under [https://sailowtech.github.io/Sailowtech-CTD/](https://sailowtech.github.io/Sailowtech-CTD/)
