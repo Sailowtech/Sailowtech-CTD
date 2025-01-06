@@ -2,8 +2,8 @@ name: Build Raspberry PI Image
 
 on:
   push:
-    branches:
-      - image-build
+    tags:
+      - v*.*.*
 
 jobs:
   build-image:
