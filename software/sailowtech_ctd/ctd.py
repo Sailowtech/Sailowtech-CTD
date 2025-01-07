@@ -11,6 +11,7 @@ from software.sailowtech_ctd.sensors.generic import GenericSensor, SensorBrand
 
 from sensors.types import Sensor
 
+from logger import logger
 
 class TooShortInterval(Exception):
     pass
@@ -67,8 +68,7 @@ class CTD:
         """Return the list of all the sensors that have been configured"""
         return self._sensors
 
-    @sensors.setter
-    def sensors(self, val):
+    def set_sensors(self, val):
         """Set a new list of configured sensors"""
         self._sensors = val
 
@@ -94,7 +94,7 @@ class CTD:
         print(f"Threshold set to : {self._pressure_threshold} mba")
 
     def setup_sensors(self):
-        self.sensors = self.DEFAULT_SENSORS
+        if len(self.sensors) == 0: logger.error("Initialize sensors before setup!"); exit(1)
 
         # Compute global minimum delay
         self._min_delay = sum([sensor.min_delay for sensor in self.sensors])
@@ -102,33 +102,8 @@ class CTD:
         for sensor in self.sensors:
             sensor.init(self._bus)
 
-        # self._calibrate_atlas_sensors()
-        # self._calibrate_bluerobotics_sensors()
-
         self._activated = True
 
-    # def measure(self, sensor: GenericSensor):
-    #     """
-    #
-    #     :param sensor:
-    #     :return: None if error / not supported, float value instead
-    #     """
-    #
-    #     if time.time() - sensor.last_read < sensor.min_delay:
-    #         print(f"Sensor '{sensor.name}' needs to wait longer between measurements !")
-    #         raise TooShortInterval()
-    #
-    #     measurement: float = None
-    #     if sensor.brand == SensorBrand.BlueRobotics:
-    #         # Do something
-    #         pass
-    #     elif sensor.brand == SensorBrand.Atlas:
-    #         # Do something
-    #         pass
-    #     else:
-    #         print(f"Sensor brand '{sensor.brand}' not supported yet !")
-    #
-    #     return measurement
 
     def measure_all(self):
 

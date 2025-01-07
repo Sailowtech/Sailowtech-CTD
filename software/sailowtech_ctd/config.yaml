@@ -16,5 +16,6 @@ sensors:
     name: "Depth Sensor"
     address: 0x76
     sensor-type: "BLUEROBOTICS_BAR30_DEPTH"
+    min-delay: 0.3
 measurements-interval: 1 # seconds
 write-sql: true

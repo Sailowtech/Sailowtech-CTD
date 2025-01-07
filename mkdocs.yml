@@ -6,4 +6,7 @@ plugins:
 - mkdocstrings:
     handlers:
       python:
+        options:
+          annotations_path: brief
+          docstring_style: sphinx
         paths: [software]

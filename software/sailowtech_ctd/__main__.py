@@ -21,10 +21,15 @@ from database.measurement import Measurement
 from ctd import CTD
 from sensors.types import Sensor as SensorType
 
+from methods.config_parser import load_file_to_yaml, get_sensors
+
 db_params = {'provider': 'sqlite', 'filename': 'debug.sqlite', 'create_db': True}
 
 if __name__ == '__main__':
+    config = load_file_to_yaml("config.yaml")
+
     ctd = CTD()
+    ctd.set_sensors(get_sensors(config))
     db.bind(**db_params)
     db.generate_mapping(create_tables=True)
     with db_session:
@@ -32,8 +37,6 @@ if __name__ == '__main__':
         s1 = Sensor(name="test-sensor", device=SensorType.ATLAS_EZO_DO)
 
     #ctd.setup_sensors()
-
-    pprint(ctd.sensors)
 
     # input("Appuyez sur Entrée pour procéder à la calibration des capteurs...\n")
     # ctd.calibrate_sensors()
