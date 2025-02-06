@@ -1,20 +1,30 @@
-[tool.poetry]
+[project]
 name = "sailowtech-ctd"
 version = "0.1.0"
 description = ""
-authors = ["Arthur Jacobs <arthur.jacobs@sailowtech.ch>",
-    "Mauro"]
+authors = [
+    { name = "Arthur Jacobs", email ="arthur.jacobs@sailowtech.ch" },
+    { name = "Mauro Sbicego" }
+]
 readme = "README.md"
-packages = [{ include = "software/sailowtech_ctd" }]
 
-[tool.poetry.dependencies]
-python = "^3.9"
-pyyaml = "^6.0.2"
-smbus2 = "^0.4.3"
-pony = "0.7.19"
-fastapi = "0.115.6"
+requires-python = ">=3.9"
+dependencies = [
+"pyyaml>=6.0.2",
+"smbus2>=0.4.3",
+"pony==0.7.19",
+"fastapi==0.115.6"
+]
 
+[project.scripts]
+sailowtech-ctd = 'software.sailowtech_ctd.__main__:main'
+
+[project.urls]
+"Documentation" = "https://sailowtech.github.io/Sailowtech-CTD/"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+packages = [{ include = "software/sailowtech_ctd" }]

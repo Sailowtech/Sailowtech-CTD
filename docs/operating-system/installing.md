@@ -17,20 +17,25 @@ You can use one of those tools, for example:
 
 Flash the downloaded *.img* file to the SD-Card by following the instructions of the tool you chose.
 
-## Prepare Hotspot
-Prepare a Hotspot (WiFi-Network) with SSID `CTD` and password `CTDCTDCTD`. The CTD will automatically connect to it.
-
-## Start the CTD and log in
- Plug in the SD-Card into the Raspberry Pi and start it. It will boot automatically and connect to the `CTD`-Hotspot.
- A IP address should be assigned (DHCP). Find the IP (for example over hotspot settings or `netdiscover`).
- Note that you can also try to use the hostname `sailowtech-ctd.local` instead of the IP-address
+## Start the CTD, connect to the access point and log in
+Plug in the SD-Card into the Raspberry Pi and start it. It will boot automatically and start an access point with the SSID `CTD`
+Connect to this access point with password `CTDCTDCTD`. 
 
 Then, connect over SSH with user `ctd` and password `ctd`:
 
-`ssh ctd@sailowtech-ctd.local`
+`ssh ctd@192.168.42.1`
 
 ## Change passwords
+Ideally, you should change the credentials of the `ctd`-user and also use another password for the access point.
 
-Ideally, you should change the credentials of the `ctd`-user and also use another password for the hotspot.
+The AP-password used can be changed in `/etc/hostapd/hostapd.conf`
 
-The hotspot-password used in the connection attempt can be changed in `/var/lib/iwd/CTD.psk`
+## Setup internet access (if needed)
+In case internet access is needed from the Raspberry Pi, you can set it up (with linux device as the other device, we'll call client).
+1. Check which ip-address is assigned by the Raspberry Pi to the AP-client with `ifconfig` (for example: 192.168.42.4)
+2. Enable IPv4-forwarding on client: `echo 1 | sudo tee /proc/sys/net/ipv4/ip_forward`
+3. Set up iptables, replace `eth0` with name of interface with internet access and `wlan0` with name of interface connected to the Raspberry Pi
+   1. `sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE`
+   2. `sudo iptables -A FORWARD -i wlan0 -o eth0 -j ACCEPT`
+4. Then, on the Raspberry Pi, add the route: `sudo ip route add default via 192.168.42.4` (adapt IP-address if required)
+5. Add nameserver: `echo "nameserver 9.9.9.9" | sudo tee /etc/resolv.conf`

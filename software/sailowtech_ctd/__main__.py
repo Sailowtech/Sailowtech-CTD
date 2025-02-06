@@ -14,18 +14,17 @@ from pprint import pprint
 
 from pony.orm import commit, db_session
 
-from database import db
-from database.metric import Metric
-from database.sensor import Sensor
-from database.measurement import Measurement
-from ctd import CTD
-from sensors.types import Sensor as SensorType
+from software.sailowtech_ctd.database import db
+from software.sailowtech_ctd.database.metric import Metric
+from software.sailowtech_ctd.database.sensor import Sensor
+from software.sailowtech_ctd.ctd import CTD
+from software.sailowtech_ctd.sensors.types import Sensor as SensorType
 
-from methods.config_parser import load_file_to_yaml, get_sensors
+from software.sailowtech_ctd.methods.config_parser import load_file_to_yaml, get_sensors
 
 db_params = {'provider': 'sqlite', 'filename': 'debug.sqlite', 'create_db': True}
 
-if __name__ == '__main__':
+def main():
     config = load_file_to_yaml("config.yaml")
 
     ctd = CTD()
@@ -36,7 +35,7 @@ if __name__ == '__main__':
         m1 = Metric(name="temperature", unit="Celsius")
         s1 = Sensor(name="test-sensor", device=SensorType.ATLAS_EZO_DO)
 
-    #ctd.setup_sensors()
+    # ctd.setup_sensors()
 
     # input("Appuyez sur Entrée pour procéder à la calibration des capteurs...\n")
     # ctd.calibrate_sensors()
@@ -55,3 +54,6 @@ if __name__ == '__main__':
     str_now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     ctd.export_csv(f'{str_now}_data.csv')
     print("Exported csv, exiting program")
+
+if __name__ == '__main__':
+    main()

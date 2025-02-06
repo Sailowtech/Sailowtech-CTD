@@ -9,9 +9,9 @@ from software.sailowtech_ctd.sensors.atlas import AtlasSensor
 from software.sailowtech_ctd.sensors.bluerobotics import DepthSensor
 from software.sailowtech_ctd.sensors.generic import GenericSensor, SensorBrand
 
-from sensors.types import Sensor
+from software.sailowtech_ctd.sensors.types import Sensor
 
-from logger import logger
+from software.sailowtech_ctd.logger import logger
 
 class TooShortInterval(Exception):
     pass
