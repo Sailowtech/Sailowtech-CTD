@@ -17,7 +17,7 @@ dependencies = [
 ]
 
 [project.scripts]
-sailowtech-ctd = 'software.sailowtech_ctd.__main__:main'
+sailowtech-ctd = 'software.sailowtech_ctd.__main__:script_entry'
 
 [project.urls]
 "Documentation" = "https://sailowtech.github.io/Sailowtech-CTD/"

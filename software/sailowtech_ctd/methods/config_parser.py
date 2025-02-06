@@ -3,7 +3,6 @@ from software.sailowtech_ctd import logger
 from software.sailowtech_ctd.sensors.atlas import AtlasSensor
 from software.sailowtech_ctd.sensors.bluerobotics import DepthSensor
 from software.sailowtech_ctd.sensors.generic import GenericSensor
-import sys
 import os
 import pathlib
 
@@ -17,7 +16,7 @@ def load_file_to_yaml(path: str) -> object:
     :return: Returns a python object of the yaml file to be further used
     """
     try:
-        path = os.path.join(pathlib.Path(sys.argv[0]).parent, path)
+        path = os.path.join(pathlib.Path(os.getcwd()), path)
         config = open(path)
     except FileNotFoundError:
         logger.error(f"Config file not found at {path}")

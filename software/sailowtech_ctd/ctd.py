@@ -91,7 +91,7 @@ class CTD:
     @pressure_threshold.setter
     def pressure_threshold(self, val):
         self._pressure_threshold = (val if val else self.DEFAULT_THRESHOLD)
-        print(f"Threshold set to : {self._pressure_threshold} mba")
+        print(f"Threshold set to: {self._pressure_threshold} mba")
 
     def setup_sensors(self):
         if len(self.sensors) == 0: logger.error("Initialize sensors before setup!"); exit(1)
@@ -111,7 +111,7 @@ class CTD:
 
 
         if time.time() - self._last_measurement < self.MEASUREMENTS_INTERVAL:
-            print("Wait longer !")
+            print("Wait longer!")
             raise TooShortInterval()
 
         depth_sensor_output = self.DEFAULT_SENSORS[0].measure_value(self._bus)
