@@ -1,17 +1,13 @@
 #!/bin/bash -e
 
-sudo systemctl disable wpa_supplicant
-sudo systemctl enable iwd.service
-sudo mkdir /var/lib/iwd
-printf "EnableNetworkConfiguration=true\n" | sudo tee /etc/iwd/main.conf
-printf "[device]\nwifi.backend=iwd\n" | sudo tee /etc/NetworkManager/conf.d/iwd.conf
-sudo mkdir -p /var/lib/iwd/ap/
-printf "[Security]\nPassphrase=CTDCTDCTD\n\n[IPv4]\nAddress=192.168.42.1\nGateway=192.168.42.1\nNetmask=255.255.255.0\nDNSList=9.9.9.9" | sudo tee /var/lib/iwd/ap/CTD.ap
+printf "interface wlan0\n\t\tstatic ip_address=192.168.42.1/24\n\t\tnohook wpa_supplicant\n" | sudo tee /etc/dhcpcd.conf
+printf "interface=wlan0\ndhcp-range=192.168.42.2,192.168.42.20,255.255.255.0,24h\n" | sudo tee /etc/dnsmasq.conf
 
-sudo iw dev wlan0 interface add ap0 type __ap || true
-sudo ip link set dev ap0 address b8:27:eb:00:00:00 || true
-sudo systemctl restart iwd || true
-sudo iwctl device ap0 set-property Mode ap || true
-sudo iwctl ap ap0 start-profile CTD || true
+sudo mkdir -p /etc/hostapd/
 
-# printf "[Security]\nPassphrase=CTDCTDCTD\n\n[Settings]\nAutoConnect=true\n" | sudo tee /var/lib/iwd/CTD.psk
+printf "country_code=CH\ninterface=wlan0\nssid=CTD\nchannel=9\nauth_algs=1\nwpa=2\nwpa_passphrase=CTDCTDCTD\nwpa_key_mgmt=WPA-PSK\nwpa_pairwise=TKIP CCMP\nrsn_pairwise=CCMP\n" | sudo tee /etc/hostapd/hostapd.conf
+printf "DAEMON_CONF=\"/etc/hostapd/hostapd.conf\"" | sudo tee -a /etc/default/hostapd
+
+sudo systemctl enable dhcpcd
+sudo systemctl enable dnsmasq
+sudo systemctl enable hostapd
