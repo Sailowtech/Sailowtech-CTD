@@ -1,15 +1,15 @@
 import csv
-import datetime
 import time
 
 import smbus2 as smbus
 
-from software.sailowtech_ctd.common import DataFields, OutputTypes
-from software.sailowtech_ctd.sensors.atlas import AtlasSensor
-from software.sailowtech_ctd.sensors.bluerobotics import DepthSensor
+from software.sailowtech_ctd.common import DataFields
+from software.sailowtech_ctd.database.measurement import Measurement
+from software.sailowtech_ctd.database.run import Run
 from software.sailowtech_ctd.sensors.generic import GenericSensor, SensorBrand
+from software.sailowtech_ctd.database.sensor import assert_sensor
 
-from software.sailowtech_ctd.sensors.types import Sensor
+from pony.orm import db_session
 
 from software.sailowtech_ctd.logger import logger
 
@@ -18,14 +18,6 @@ class TooShortInterval(Exception):
 
 
 class CTD:
-    # I'm sorry for this. Hardcoding all the sensors.
-    DEFAULT_SENSORS: list[GenericSensor] = [
-        DepthSensor("Depth Sensor", 0x76, min_delay=0.3),
-        AtlasSensor(Sensor.ATLAS_EZO_DO, "Dissolved Oxygen", 0x61),
-        AtlasSensor(Sensor.ATLAS_EZO_CONDUCTIVITY, "Conductivity Probe", 0x64),
-        AtlasSensor(Sensor.ATLAS_EZO_TEMP, "Temperature from Dissolved Oxygen Sensor", 0x66),
-    ]
-
     # the default bus for I2C on the newer Raspberry Pis,
     # certain older boards use bus 0
     DEFAULT_BUS = 1
@@ -34,11 +26,14 @@ class CTD:
 
     DEFAULT_THRESHOLD = 500  # By default, : 500mba (~5m of water)
 
-    def __init__(self, bus=DEFAULT_BUS, output: OutputTypes=OutputTypes.SQL, useConfig: bool = True):
-
-        self.output: OutputTypes = OutputTypes.SQL
+    def __init__(self, bus=DEFAULT_BUS):
         self.name: str = ''
         self._sensors: list[GenericSensor] = []
+
+        with db_session:
+            r = Run()
+            r.flush()
+            self.run_id = r.id
 
         # self.load_config(config_path)
 
@@ -101,40 +96,37 @@ class CTD:
 
         for sensor in self.sensors:
             sensor.init(self._bus)
+            assert_sensor(sensor)
 
         self._activated = True
 
 
     def measure_all(self):
-
-        print(self.output)
-
-
         if time.time() - self._last_measurement < self.MEASUREMENTS_INTERVAL:
             print("Wait longer!")
             raise TooShortInterval()
 
-        depth_sensor_output = self.DEFAULT_SENSORS[0].measure_value(self._bus)
+        for sensor in self.sensors:
 
-        for i in range(3):  # Test Read Atlas
-            print(self.DEFAULT_SENSORS[i + 1].measure_value(self._bus))
+            measured_value = sensor.measure_value(self._bus)
+            with db_session:
+                sensor_obj = assert_sensor(sensor)
+                Measurement(sensor = sensor_obj, value = measured_value, run = Run.get(id = self.run_id))
+
+        # INVALID: TODO
+        # depth_sensor_output = self.DEFAULT_SENSORS[0].measure_value(self._bus)
+
+        # INVALID: TODO
+        #for i in range(3):  # Test Read Atlas
+        #    print(self.DEFAULT_SENSORS[i + 1].measure_value(self._bus))
 
         # Check for end of measurements (we stop when we go up enough)
-        if self._max_pressure - depth_sensor_output[DataFields.PRESSURE_MBA] >= self._pressure_threshold:
-            self._activated = False
-            print("Stopped because went up")
-        else:
-            self._max_pressure = max(self._max_pressure, depth_sensor_output[DataFields.PRESSURE_MBA])
+        #if self._max_pressure - depth_sensor_output[DataFields.PRESSURE_MBA] >= self._pressure_threshold:
+        #    self._activated = False
+        #    print("Stopped because went up")
+        #else:
+        #    self._max_pressure = max(self._max_pressure, depth_sensor_output[DataFields.PRESSURE_MBA])
 
-        now = datetime.datetime.now()
-
-        time_values = {DataFields.TIMESTAMP: now.timestamp(),
-                       DataFields.DATE: now.strftime("%Y-%m-%d %H:%M:%S")}
-
-        self._data.append(time_values | depth_sensor_output)
-        print(f'Depth value: {depth_sensor_output[DataFields.DEPTH_METERS]}\n'
-              f'Pressure (mba) : {depth_sensor_output[DataFields.PRESSURE_MBA]}\n'
-              f'Temperature (C) : {depth_sensor_output[DataFields.TEMPERATURE]}\n')
 
     def export_csv(self, path: str):
         fields = [DataFields.TIMESTAMP, DataFields.DATE,

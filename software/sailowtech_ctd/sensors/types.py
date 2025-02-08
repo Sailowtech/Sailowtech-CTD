@@ -5,3 +5,4 @@ class Sensor(StrEnum):
     ATLAS_EZO_CONDUCTIVITY = auto()
     ATLAS_EZO_DO = auto()
     ATLAS_EZO_TEMP = auto()
+    MOCK_SENSOR = auto()

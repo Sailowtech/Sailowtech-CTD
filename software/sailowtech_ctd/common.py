@@ -7,8 +7,3 @@ class DataFields(StrEnum):
     PRESSURE_MBA = "pressure (mba)"
     DEPTH_METERS = "calculated depth (m)"
     TEMPERATURE = "temperature (°C)"
-
-
-class OutputTypes(Enum):
-    SQL = auto()
-    CSV = auto()

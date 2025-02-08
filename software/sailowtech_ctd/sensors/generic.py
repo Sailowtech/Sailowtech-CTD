@@ -6,6 +6,7 @@ from .types import Sensor
 class SensorBrand(Enum):
     Atlas = auto()
     BlueRobotics = auto()
+    MockBrand = auto()
 
 class GenericSensor:
     class Commands(Enum):
