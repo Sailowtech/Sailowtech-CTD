@@ -8,12 +8,13 @@ authors = [
 ]
 readme = "README.md"
 
-requires-python = ">=3.9"
+requires-python = "=3.12.8"
 dependencies = [
 "pyyaml>=6.0.2",
 "smbus2>=0.4.3",
 "pony==0.7.19",
-"fastapi==0.115.6"
+"fastapi[standard] (>=0.115.8,<0.116.0)",
+"uvicorn[standard] (>=0.34.0,<0.35.0)"
 ]
 
 [project.scripts]

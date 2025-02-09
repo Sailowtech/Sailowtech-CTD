@@ -20,7 +20,15 @@ from software.sailowtech_ctd.ctd import CTD
 
 from software.sailowtech_ctd.methods.config_parser import load_file_to_yaml, get_sensors, is_mock, get_interval
 
-db_params = {'provider': 'sqlite', 'filename': '../../data/debug.sqlite', 'create_db': True}
+def init_db():
+    db_params = {'provider': 'sqlite', 'filename': '../../data/debug.sqlite', 'create_db': True}
+    db.bind(**db_params)
+    db.generate_mapping(create_tables=True)
+
+
+init_db()
+from software.sailowtech_ctd.webapi.app import app # don't delete import!
+
 
 def script_entry():
     if len(sys.argv) < 2:
@@ -32,12 +40,9 @@ def script_entry():
 
 def main(configfile: str):
     config = load_file_to_yaml(configfile)
-    print(config)
     mockery = is_mock(config)
     interval = get_interval(config)
 
-    db.bind(**db_params)
-    db.generate_mapping(create_tables=True)
     with db_session:
         if not Metric.exists(name="temperature", unit="Celsius"):
             Metric(name="temperature", unit="Celsius")
