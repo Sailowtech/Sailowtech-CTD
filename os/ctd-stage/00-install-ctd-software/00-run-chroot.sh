@@ -1,6 +1,7 @@
 #!/bin/bash -e
 
-pyenv install 3.12.8 # required python version for PonyORM to work
+curl -fsSL https://pyenv.run | bash
+/home/ctd/.pyenv/bin/pyenv install 3.12.8 # required python version for PonyORM to work
 pipx install poetry
 pipx ensurepath
 git clone https://github.com/Sailowtech/Sailowtech-CTD.git /home/ctd/Sailowtech-CTD
