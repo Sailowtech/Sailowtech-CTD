@@ -7,12 +7,17 @@ from .types import Sensor
 
 
 class BlueRoboticsSensor(GenericSensor):
-
+    """
+    Base for a Bluerobotics sensor
+    """
     def __init__(self, sensor: Sensor, name: str, address: int, min_delay: float = 1):
         super().__init__(SensorBrand.BlueRobotics, sensor, name, address, min_delay)
 
 
 class DepthSensor(BlueRoboticsSensor):
+    """
+    Class for a depth sensor by Bluerobotics
+    """
     _MS5837_ADDR = 0x76
     _MS5837_RESET = 0x1E
     _MS5837_ADC_READ = 0x00
@@ -54,6 +59,12 @@ class DepthSensor(BlueRoboticsSensor):
     UNITS_Kelvin = 3
 
     def __init__(self, name: str, address: int = DEFAULT_ADDRESS, min_delay: float = 1):
+        """
+        Initialise the class of the depth sensor
+        :param name: Name of the sensor
+        :param address: I2C-Address of the sensor
+        :param min_delay: Required minimum delay
+        """
         super().__init__(Sensor.BLUEROBOTICS_BAR30_DEPTH, name, address, min_delay)
         self._model = self.MODEL_30BA
         self._C = []
@@ -64,7 +75,12 @@ class DepthSensor(BlueRoboticsSensor):
         self._D1 = 0
         self._D2 = 0
 
-    def init(self, bus: smbus.SMBus):
+    def init(self, bus: smbus.SMBus) -> bool:
+        """
+        Initialise the device of the depth sensor
+        :param bus: SMBus over which the device can be reached
+        :return: True if successful
+        """
         bus.write_byte(i2c_addr=self._MS5837_ADDR, value=self._MS5837_RESET)
 
         # Wait for reset to complete
@@ -82,10 +98,14 @@ class DepthSensor(BlueRoboticsSensor):
         if crc != self._crc4(self._C):
             print("PROM read error, CRC failed!")
             return False
-
         return True
 
     def measure_value(self, bus: smbus.SMBus):
+        """
+        Measures the different values
+        :param bus: SMBus over which the device can be reached
+        :return: Returns the different values
+        """
         self.read(bus)
         return {DataFields.PRESSURE_MBA: self.pressure(self.UNITS_mbar),
                 DataFields.DEPTH_METERS: self.depth(),
@@ -93,7 +113,13 @@ class DepthSensor(BlueRoboticsSensor):
 
     ###############################################################
     # FULLY COPIED FROM BLUEROBOTICS's CODE, just some parameters adapted and "self."  added
-    def read(self, bus: smbus.SMBus, oversampling=OSR_8192):
+    def read(self, bus: smbus.SMBus, oversampling=OSR_8192) -> bool:
+        """
+        Take a reading of the sensor
+        :param bus: SMBus over which the device can be reached
+        :param oversampling: Oversampling attribute
+        :return: True of successful
+        """
         if oversampling < self.OSR_256 or oversampling > self.OSR_8192:
             print("Invalid oversampling option!")
             return False
@@ -125,34 +151,54 @@ class DepthSensor(BlueRoboticsSensor):
         return True
 
     def set_fluid_density(self, density):
+        """
+        Set the fluid density of the water
+        :param density: Density to be set
+        :return: None
+        """
         self._fluidDensity = density
 
-    # Pressure in requested units
-    # mbar * conversion
-    def pressure(self, conversion=UNITS_mbar):
+    def pressure(self, conversion=UNITS_mbar) -> float:
+        """
+        Get the pressure in the requested unit. Defaults to mBar.
+        :param conversion: The unit conversion which should be used to return the value
+        :return: Returns the pressure measured
+        """
         return self._pressure * conversion
 
-    # Temperature in requested units
-    # default degrees C
-    def temperature(self, conversion=UNITS_Centigrade):
-        degC = self._temperature / 100.0
-        if conversion == self.UNITS_Fahrenheit:
-            return (9.0 / 5.0) * degC + 32
-        elif conversion == self.UNITS_Kelvin:
-            return degC + 273
-        return degC
 
-    # Depth relative to MSL pressure in given fluid density
-    def depth(self):
+    def temperature(self, conversion=UNITS_Centigrade) -> float:
+        """
+        Temperature in requested units. Default in degrees Celsius
+        :param conversion: The conversion to be applied
+        :return: Returns the temperature in requested unit
+        """
+        deg_c = self._temperature / 100.0
+        if conversion == self.UNITS_Fahrenheit:
+            return (9.0 / 5.0) * deg_c + 32
+        elif conversion == self.UNITS_Kelvin:
+            return deg_c + 273
+        return deg_c
+
+
+    def depth(self) -> float:
+        """
+        Depth relative to MSL pressure in given fluid density
+        :return: Returns depth
+        """
         return (self.pressure(self.UNITS_Pa) - 101300) / (self._fluidDensity * 9.80665)
 
-    # Altitude relative to MSL pressure
-    def altitude(self):
+
+    def altitude(self) -> float:
+        """
+        Altitude relative to MSL pressure
+        :return: Altitude relative to MSL pressure
+        """
         return (1 - pow((self.pressure() / 1013.25), .190284)) * 145366.45 * .3048
 
         # Cribbed from datasheet
 
-    def _calculate(self):
+    def _calculate(self) -> None:
         OFFi = 0
         SENSi = 0
         Ti = 0
@@ -202,6 +248,11 @@ class DepthSensor(BlueRoboticsSensor):
             # Cribbed from datasheet
 
     def _crc4(self, n_prom):
+        """
+        Checksum function
+        :param n_prom: ?
+        :return: Checksum
+        """
         n_rem = 0
 
         n_prom[0] = ((n_prom[0]) & 0x0FFF)

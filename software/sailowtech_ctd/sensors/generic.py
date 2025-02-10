@@ -4,6 +4,9 @@ import smbus2 as smbus
 from .types import Sensor
 
 class SensorBrand(Enum):
+    """
+    The different brands of the sensors. Some brands have their own protocols, which is why we group them together.
+    """
     Atlas = auto()
     BlueRobotics = auto()
     MockBrand = auto()
@@ -13,6 +16,14 @@ class GenericSensor:
         ...
 
     def __init__(self, brand: SensorBrand, sensor_type: Sensor, name: str, address: int, min_delay: float = 1):
+        """
+        Initialisation of a generic sensor
+        :param brand: Brand of the sensor
+        :param sensor_type: Type of the sensor
+        :param name: Name of the sensor
+        :param address: Address of the sensor
+        :param min_delay: Minimum delay of the sensor required for measuring
+        """
         self.brand: SensorBrand = brand
         self.sensor_type: Sensor = sensor_type
 
