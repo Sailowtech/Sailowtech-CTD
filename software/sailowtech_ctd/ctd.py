@@ -126,18 +126,3 @@ class CTD:
         #    print("Stopped because went up")
         #else:
         #    self._max_pressure = max(self._max_pressure, depth_sensor_output[DataFields.PRESSURE_MBA])
-
-
-    def export_csv(self, path: str):
-        fields = [DataFields.TIMESTAMP, DataFields.DATE,
-                  DataFields.PRESSURE_MBA, DataFields.DEPTH_METERS,
-                  DataFields.TEMPERATURE]
-
-        with open(path, 'w', newline='') as csvfile:
-            csvwriter = csv.DictWriter(csvfile, fieldnames=fields)
-
-            # Write the field names
-            csvwriter.writeheader()
-
-            # Write the data
-            csvwriter.writerows(self._data)

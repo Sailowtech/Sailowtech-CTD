@@ -48,6 +48,16 @@ def get_interval(config: object) -> int:
     else:
         return config["interval"]
 
+def get_threshold(config: object) -> int:
+    """
+    Get the depth cutoff threshold specified in the config
+    :param config: The config object
+    :return: Returns an int of the depth threshold
+    """
+    if "threshold" not in config:
+        logger.error("No threshold configured in Config!"); exit(1)
+    else:
+        return config["threshold"]
 
 def get_sensors(config: object) -> list[GenericSensor]:
     """

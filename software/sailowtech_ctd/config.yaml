@@ -18,3 +18,5 @@ sensors:
     sensor-type: "BLUEROBOTICS_BAR30_DEPTH"
     min-delay: 0.3
 interval: 1 # seconds
+mock: false
+threshold: 300

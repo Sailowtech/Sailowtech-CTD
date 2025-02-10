@@ -14,3 +14,4 @@ sensors:
     max: 10
 interval: 1 # seconds
 mock: true
+threshold: 300
