@@ -35,6 +35,17 @@ test = ["anyio[trio]", "coverage[toml] (>=7)", "exceptiongroup (>=1.2.0)", "hypo
 trio = ["trio (>=0.26.1)"]
 
 [[package]]
+name = "atlas-i2c"
+version = "0.3.1"
+description = "Atlas I2C"
+optional = false
+python-versions = ">=3.6"
+groups = ["main"]
+files = [
+    {file = "atlas_i2c-0.3.1-py3-none-any.whl", hash = "sha256:c82a09ae15efb47d1027adf6dc18547e17927cdb1c4f0346daf916cb933f3c38"},
+]
+
+[[package]]
 name = "certifi"
 version = "2025.1.31"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -1034,4 +1045,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "=3.12.8"
-content-hash = "c7c2405f8f2f1c019201e2f931bb4ef69a354c097397645331ce6f55dfc171fa"
+content-hash = "28ed2b09573b4c488ef0458e9697bab189cbb171181c507601385e0d857a7168"

@@ -14,7 +14,8 @@ dependencies = [
 "smbus2>=0.4.3",
 "pony==0.7.19",
 "fastapi[standard] (>=0.115.8,<0.116.0)",
-"uvicorn[standard] (>=0.34.0,<0.35.0)"
+"uvicorn[standard] (>=0.34.0,<0.35.0)",
+"atlas-i2c (>=0.3.1,<0.4.0)"
 ]
 
 [project.scripts]
