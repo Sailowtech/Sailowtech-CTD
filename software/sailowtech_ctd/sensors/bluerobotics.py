@@ -100,16 +100,15 @@ class DepthSensor(BlueRoboticsSensor):
             return False
         return True
 
-    def measure_value(self, bus: smbus.SMBus):
+    def measure_value(self, bus: smbus.SMBus) -> float:
         """
         Measures the different values
         :param bus: SMBus over which the device can be reached
         :return: Returns the different values
         """
         self.read(bus)
-        return {DataFields.PRESSURE_MBA: self.pressure(self.UNITS_mbar),
-                DataFields.DEPTH_METERS: self.depth(),
-                DataFields.TEMPERATURE: self.temperature(self.UNITS_Centigrade)}
+        # TODO here, we are returning all the different values that we get from this sensor. However, we are only expecting one. We need to find a good solution on how to differentiate these readings across the objects. Maybe save both depth and pressure, since both can be useful and directly saving the depth can be good for easier quick-assessment
+        return self.depth()
 
     ###############################################################
     # FULLY COPIED FROM BLUEROBOTICS's CODE, just some parameters adapted and "self."  added
