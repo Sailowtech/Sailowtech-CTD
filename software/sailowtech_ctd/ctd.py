@@ -108,7 +108,7 @@ class CTD:
 
         for sensor in self.sensors:
             sensor.write_read_command(self._bus)
-
+        time.sleep(1.05)
         for sensor in self.sensors:
             measured_value = sensor.read_result(self._bus)
             with db_session:
