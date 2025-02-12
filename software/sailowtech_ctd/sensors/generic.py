@@ -42,6 +42,12 @@ class GenericSensor:
     def measure_value(self, bus: smbus.SMBus):
         ...
 
+    def write_read_command(self, bus: smbus.SMBus) -> bool:
+        ...
+
+    def read_result(self, bus: smbus.SMBus) -> float:
+        ...
+
     def __str__(self):
         return f'{self.__class__.__name__}(' \
                f'name="{self.name}", ' \

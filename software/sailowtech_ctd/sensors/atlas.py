@@ -1,7 +1,7 @@
 from enum import StrEnum
 
 import smbus2 as smbus
-from atlas_i2c import sensors as atlas_sensors
+from atlas_i2c import atlas_i2c
 from atlas_i2c import commands
 
 from software.sailowtech_ctd.sensors.generic import GenericSensor, SensorBrand
@@ -21,13 +21,26 @@ def handle_raspi_glitch(response):  # Maybe useless when using smbus ?
 class AtlasSensor(GenericSensor):
     def __init__(self, sensor: Sensor, name: str, address: int, min_delay: float = 1):
         super().__init__(SensorBrand.Atlas, sensor, name, address, min_delay)
-        self.device = atlas_sensors.Sensor(name, address)
+        self.device = atlas_i2c.AtlasI2C()
+        self.device.set_i2c_address(address)
 
     def init(self, bus: smbus.SMBus):
-        self.device.connect()
+        pass
 
     def calibrate(self, bus: smbus.SMBus):
         pass
+
+    def write_read_command(self, bus: smbus.SMBus) -> bool:
+        self.device.write("R")
+        return True
+
+    def read_result(self, bus: smbus.SMBus) -> float:
+        result = self.device.read("R")
+        if result.status_code == 1:
+            return float(result.data.decode("UTF-8"))
+        else:
+            logger.warning("INVALID RESPONSE RECEIVED")
+            return 0
 
     def measure_value(self, bus: smbus.SMBus) -> float:
         print("Measuring atlas sensor...")

@@ -107,7 +107,10 @@ class CTD:
             raise TooShortInterval()
 
         for sensor in self.sensors:
-            measured_value = sensor.measure_value(self._bus)
+            sensor.write_read_command(self._bus)
+
+        for sensor in self.sensors:
+            measured_value = sensor.read_result(self._bus)
             with db_session:
                 sensor_obj = assert_sensor(sensor)
                 Measurement(sensor = sensor_obj, value = measured_value, run = Run.get(id = self.run_id))

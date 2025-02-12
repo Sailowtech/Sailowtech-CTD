@@ -58,6 +58,7 @@ def main(configfile: str):
     else:
         print("i2C Bus not connected!")
     i = 0
+    
     while i < 10 and ctd.activated and (ctd.is_bus_connected | mockery):
         ctd.measure_all()
         time.sleep(interval)

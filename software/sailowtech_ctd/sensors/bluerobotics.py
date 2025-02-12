@@ -1,5 +1,6 @@
 from time import sleep
 import smbus2 as smbus
+from click.formatting import measure_table
 
 from software.sailowtech_ctd.common import DataFields
 from software.sailowtech_ctd.sensors.generic import GenericSensor, SensorBrand
@@ -100,6 +101,12 @@ class DepthSensor(BlueRoboticsSensor):
             return False
         return True
 
+    def write_read_command(self, bus: smbus.SMBus) -> bool:
+        return True
+
+    def read_result(self, bus: smbus.SMBus) -> float:
+        return self.measure_value(bus)
+
     def measure_value(self, bus: smbus.SMBus) -> float:
         """
         Measures the different values
@@ -117,7 +124,7 @@ class DepthSensor(BlueRoboticsSensor):
         Take a reading of the sensor
         :param bus: SMBus over which the device can be reached
         :param oversampling: Oversampling attribute
-        :return: True of successful
+        :return: True if successful
         """
         if oversampling < self.OSR_256 or oversampling > self.OSR_8192:
             print("Invalid oversampling option!")

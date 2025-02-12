@@ -30,6 +30,12 @@ class MockSensor(GenericSensor):
         """
         return True
 
+    def write_read_command(self, bus: smbus.SMBus) -> bool:
+        return True
+
+    def read_result(self, bus: smbus.SMBus) -> float:
+        return self.measure_value(bus)
+
     def measure_value(self, bus: smbus.SMBus):
         """
         Measure the value of the mock sensor. Returns a random value between the minimum and maximum set during class instantiation
