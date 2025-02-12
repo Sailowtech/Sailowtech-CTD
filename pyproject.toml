@@ -20,6 +20,7 @@ dependencies = [
 
 [project.scripts]
 sailowtech-ctd = 'software.sailowtech_ctd.__main__:script_entry'
+web = 'software.sailowtech_ctd.webapi.app:start'
 
 [project.urls]
 "Documentation" = "https://sailowtech.github.io/Sailowtech-CTD/"

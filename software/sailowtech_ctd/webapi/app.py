@@ -1,7 +1,9 @@
 from fastapi import FastAPI
+import uvicorn
+
 from starlette.responses import StreamingResponse
 
-from software.sailowtech_ctd.__main__ import main
+from software.sailowtech_ctd.__main__ import webapp_entry
 from software.sailowtech_ctd.database import db
 from pony.orm import *
 from software.sailowtech_ctd.database.measurement import Measurement
@@ -11,6 +13,9 @@ import csv
 
 app = FastAPI()
 
+def start():
+    """Start app with uvicorn"""
+    uvicorn.run("software.sailowtech_ctd.webapi.app:app", host="0.0.0.0", port=8000, reload=True)
 
 @app.get("/")
 def root():
@@ -22,12 +27,12 @@ def root():
     return {"data": "Welcome to the CTD"}
 
 @app.get("/run")
-def run():
+def run(measurements: int = 10):
     """
     Create a new run and measure. Why are you running?
     :return: Returns the id of the run upon finish.
     """
-    return main("software/sailowtech_ctd/config-mock.yaml") # Todo somehow do correct config selection
+    return webapp_entry(measurements) # Todo somehow do correct config selection
 
 @app.get("/runs")
 def get_runs():

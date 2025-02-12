@@ -36,6 +36,31 @@ def script_entry():
         configfile = sys.argv[1]
     main(configfile)
 
+def webapp_entry(measurements: int):
+    config = load_file_to_yaml("software/sailowtech_ctd/config.yaml")
+    mockery = is_mock(config)
+    interval = get_interval(config)
+
+    with db_session:
+        if not Metric.exists(name="temperature", unit="Celsius"):
+            Metric(name="temperature", unit="Celsius")
+
+    ctd = CTD()
+    ctd.set_sensors(get_sensors(config))
+    ctd.setup_sensors()
+
+    ctd.pressure_threshold = get_threshold(config)
+    if not (ctd.is_bus_connected | mockery):
+        print("i2C Bus not connected!")
+
+    i = 0
+    while i < measurements and ctd.activated and (ctd.is_bus_connected | mockery):
+        ctd.measure_all()
+        time.sleep(interval)
+        i += 1
+
+    return ctd.run_id
+
 def main(configfile: str):
     config = load_file_to_yaml(configfile)
     mockery = is_mock(config)
@@ -58,7 +83,7 @@ def main(configfile: str):
     else:
         print("i2C Bus not connected!")
     i = 0
-    
+
     while i < 10 and ctd.activated and (ctd.is_bus_connected | mockery):
         ctd.measure_all()
         time.sleep(interval)
