@@ -2,3 +2,4 @@
 .idea
 *.sqlite
 *.csv
+__pycache__

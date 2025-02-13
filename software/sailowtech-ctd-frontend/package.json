@@ -1,6 +1,6 @@
 {
   "name": "sailowtech-ctd-frontend",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "type": "module",
   "scripts": {
@@ -11,6 +11,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "axios": "^1.7.9",
     "pinia": "^2.3.1",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
@@ -19,9 +20,12 @@
     "@eslint/js": "^9.18.0",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/eslint-config-prettier": "^10.1.0",
+    "autoprefixer": "^10.4.20",
     "eslint": "^9.18.0",
     "eslint-plugin-vue": "^9.32.0",
+    "postcss": "^8.5.2",
     "prettier": "^3.4.2",
+    "tailwindcss": "^3.4.17",
     "vite": "^6.0.11",
     "vite-plugin-vue-devtools": "^7.7.1"
   }
