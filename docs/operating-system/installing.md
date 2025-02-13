@@ -32,9 +32,10 @@ The AP-password used can be changed in `/etc/hostapd/hostapd.conf`
 
 ## Setup internet access (if needed)
 In case internet access is needed from the Raspberry Pi, you can set it up (with linux device as the other device, we'll call client).
+
 1. Check which ip-address is assigned by the Raspberry Pi to the AP-client with `ifconfig` (for example: 192.168.42.4)
 2. Enable IPv4-forwarding on client: `echo 1 | sudo tee /proc/sys/net/ipv4/ip_forward`
-3. Set up iptables, replace `eth0` with name of interface with internet access and `wlan0` with name of interface connected to the Raspberry Pi
+3. Set up iptables, replace `eth0` with name of interface with internet access and `wlan0` with name of interface connected to the Raspberry Pi:
    1. `sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE`
    2. `sudo iptables -A FORWARD -i wlan0 -o eth0 -j ACCEPT`
 4. Then, on the Raspberry Pi, add the route: `sudo ip route add default via 192.168.42.4` (adapt IP-address if required)
