@@ -1,21 +1,15 @@
 from fastapi import FastAPI
-import uvicorn
 
 from starlette.responses import StreamingResponse
 
-from software.sailowtech_ctd.__main__ import webapp_entry
 from software.sailowtech_ctd.database import db
 from pony.orm import *
 from software.sailowtech_ctd.database.measurement import Measurement
-from software.sailowtech_ctd.database.run import Run
+from software.sailowtech_ctd.database.run import Run, create_run, RunTypes, stop_run
 import io
 import csv
 
 app = FastAPI()
-
-def start():
-    """Start app with uvicorn"""
-    uvicorn.run("software.sailowtech_ctd.webapi.app:app", host="0.0.0.0", port=80)
 
 @app.get("/")
 def root():
@@ -27,12 +21,24 @@ def root():
     return {"data": "Welcome to the CTD"}
 
 @app.get("/run")
-def run(measurements: int = 10):
+def run(run_type: RunTypes, run_data: int = 0):
     """
     Create a new run and measure. Why are you running?
+    Run Types:
+    - 0: Manual stopping
+    - 1: Stop after amount of seconds (run_data)
+    - 2: Stop after amount of measurements (specified in run_data)
     :return: Returns the id of the run upon finish.
     """
-    return webapp_entry(measurements) # Todo somehow do correct config selection
+    return create_run(run_type, run_data)
+
+@app.get("/stop")
+def stop(run_id: int) -> bool:
+    """
+    Stop the run for the given run id
+    :return: Returns true if finished successfully
+    """
+    return stop_run(run_id)
 
 @app.get("/runs")
 def get_runs():
@@ -45,14 +51,19 @@ def get_runs():
         return {'data': [p.to_dict() for p in list(Run.select())]}
 
 @app.get("/csv")
-def csv_export():
+def csv_export(run_id: int | None = None):
     """
     Export measurements to a CSV-file. Can be filtered.
 
     :return: Returns the measurements as a CSV
     """
     with db_session:
-        measurements = select((m.run.id, m.timestamp, m.value, m.sensor.name) for m in Measurement)[:]
+        measurements = select((m.run.id, m.timestamp, m.value, m.sensor.name) for m in Measurement)
+        if run_id is None:
+            measurements = measurements[:]
+        else:
+            measurements = measurements.filter(lambda r, a, b, c: r == run_id)
+
         output = io.StringIO()
         writer = csv.writer(output)
         writer.writerow(["run_id", "value", "timestamp", "sensor_name"])

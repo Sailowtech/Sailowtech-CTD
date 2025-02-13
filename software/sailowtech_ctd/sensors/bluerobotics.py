@@ -2,7 +2,6 @@ from time import sleep
 import smbus2 as smbus
 from click.formatting import measure_table
 
-from software.sailowtech_ctd.common import DataFields
 from software.sailowtech_ctd.sensors.generic import GenericSensor, SensorBrand
 from .types import Sensor
 

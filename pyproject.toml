@@ -1,6 +1,6 @@
 [project]
 name = "sailowtech-ctd"
-version = "0.0.10"
+version = "0.0.18"
 description = ""
 authors = [
     { name = "Arthur Jacobs", email ="arthur.jacobs@sailowtech.ch" },
@@ -19,8 +19,8 @@ dependencies = [
 ]
 
 [project.scripts]
-sailowtech-ctd = 'software.sailowtech_ctd.__main__:script_entry'
-web = 'software.sailowtech_ctd.webapi.app:start'
+web = 'software.sailowtech_ctd.__main__:start'
+web-debug = 'software.sailowtech_ctd.__main__:start_debug'
 
 [project.urls]
 "Documentation" = "https://sailowtech.github.io/Sailowtech-CTD/"

@@ -1,9 +1,9 @@
 import csv
 import time
+from enum import Enum, auto
 
 import smbus2 as smbus
 
-from software.sailowtech_ctd.common import DataFields
 from software.sailowtech_ctd.database.measurement import Measurement
 from software.sailowtech_ctd.database.run import Run
 from software.sailowtech_ctd.sensors.generic import GenericSensor, SensorBrand
@@ -29,11 +29,6 @@ class CTD:
     def __init__(self, bus=DEFAULT_BUS):
         self.name: str = ''
         self._sensors: list[GenericSensor] = []
-
-        with db_session:
-            r = Run()
-            r.flush()
-            self.run_id = r.id
 
         # self.load_config(config_path)
 
@@ -101,7 +96,7 @@ class CTD:
         self._activated = True
 
 
-    def measure_all(self):
+    def measure_all(self, run_id: int):
         if time.time() - self._last_measurement < self.MEASUREMENTS_INTERVAL:
             print("Wait longer!")
             raise TooShortInterval()
@@ -113,18 +108,4 @@ class CTD:
             measured_value = sensor.read_result(self._bus)
             with db_session:
                 sensor_obj = assert_sensor(sensor)
-                Measurement(sensor = sensor_obj, value = measured_value, run = Run.get(id = self.run_id))
-
-        # INVALID: TODO
-        # depth_sensor_output = self.DEFAULT_SENSORS[0].measure_value(self._bus)
-
-        # INVALID: TODO
-        #for i in range(3):  # Test Read Atlas
-        #    print(self.DEFAULT_SENSORS[i + 1].measure_value(self._bus))
-
-        # Check for end of measurements (we stop when we go up enough)
-        #if self._max_pressure - depth_sensor_output[DataFields.PRESSURE_MBA] >= self._pressure_threshold:
-        #    self._activated = False
-        #    print("Stopped because went up")
-        #else:
-        #    self._max_pressure = max(self._max_pressure, depth_sensor_output[DataFields.PRESSURE_MBA])
+                Measurement(sensor = sensor_obj, value = measured_value, run = Run.get(id = run_id))
