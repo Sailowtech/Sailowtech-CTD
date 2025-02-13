@@ -15,7 +15,7 @@ app = FastAPI()
 
 def start():
     """Start app with uvicorn"""
-    uvicorn.run("software.sailowtech_ctd.webapi.app:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("software.sailowtech_ctd.webapi.app:app", host="0.0.0.0", port=8000)
 
 @app.get("/")
 def root():
