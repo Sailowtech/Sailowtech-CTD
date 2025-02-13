@@ -10,7 +10,7 @@ class ColoredFormatter(logging.Formatter):
     cyan = "\x1b[36;20m"
     bold_red = "\x1b[31;1m"
     reset = "\x1b[0m"
-    format = "%(levelname)s: " + reset + "%(asctime)s - %(message)s"
+    format = "%(levelname)s" + reset + ": %(asctime)s - %(message)s"
     datefmt = "%d.%m.%Y %H:%M:%S"
 
     FORMATS = {
