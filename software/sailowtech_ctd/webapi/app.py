@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 
 from starlette.responses import StreamingResponse
+from starlette.staticfiles import StaticFiles
 
 from software.sailowtech_ctd.database import db
 from pony.orm import *
@@ -11,7 +12,7 @@ import csv
 
 app = FastAPI()
 
-@app.get("/")
+@app.get("/root")
 def root():
     """
     Welcome message of the web service. Can be used to check if the service is running.
@@ -74,3 +75,6 @@ def csv_export(run_id: int | None = None):
             media_type="text/csv",
             headers={"Content-Disposition": "attachment; filename=measurements.csv"}
         )
+
+
+app.mount("/", StaticFiles(directory="software/sailowtech-ctd-frontend/dist", html=True), name="frontend")
