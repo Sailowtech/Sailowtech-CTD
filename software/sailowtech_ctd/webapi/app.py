@@ -1,3 +1,6 @@
+import os
+import pathlib
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import StreamingResponse
@@ -87,5 +90,6 @@ def csv_export(run_id: int | None = None):
             headers={"Content-Disposition": "attachment; filename=measurements.csv"}
         )
 
-
-app.mount("/", StaticFiles(directory="software/sailowtech-ctd-frontend/dist", html=True), name="frontend")
+directory = os.path.abspath(os.path.join(pathlib.Path(os.path.dirname(__file__), "../../sailowtech-ctd-frontend/dist")))
+print(directory)
+app.mount("/", StaticFiles(directory=directory, html=True), name="frontend")
