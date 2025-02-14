@@ -32,7 +32,7 @@ To stop the recording, click on the button `Stop Running` of the corresponding r
 To download the data, locate the desired run in the list, and click on `Download data`
 
 ## Take a measurement with the CTD
-!!! danger "Don't break the CTD lol"
+!!! danger "Don't lose the CTD lol"
     Always make sure that the rope of the CTD is attached correctly, and the pressure closure (the round screw thingy on top with OK written on it) is fully screwed close.
     Note down the GPS coordinates, the depth and the water current direction in the unlikely case it gets lost.
 
