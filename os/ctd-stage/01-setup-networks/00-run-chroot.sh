@@ -1,13 +1,13 @@
 #!/bin/bash -e
 
-printf "interface wlan0\n\t\tstatic ip_address=192.168.42.1/24\n\t\tnohook wpa_supplicant\n" | sudo tee /etc/dhcpcd.conf
-printf "interface=wlan0\ndhcp-range=192.168.42.2,192.168.42.20,255.255.255.0,24h\n" | sudo tee /etc/dnsmasq.conf
 
-sudo mkdir -p /etc/hostapd/
 
-printf "country_code=CH\ninterface=wlan0\nssid=CTD\nchannel=9\nauth_algs=1\nwpa=2\nwpa_passphrase=CTDCTDCTD\nwpa_key_mgmt=WPA-PSK\nwpa_pairwise=TKIP CCMP\nrsn_pairwise=CCMP\n" | sudo tee /etc/hostapd/hostapd.conf
-printf "DAEMON_CONF=\"/etc/hostapd/hostapd.conf\"" | sudo tee -a /etc/default/hostapd
+printf "nmcli con delete CTD-AP\nnmcli con add type wifi ifname wlan0 mode ap con-name CTD-AP ssid CTD autoconnect true\nnmcli con modify CTD-AP 802-11-wireless.band bg\nnmcli con modify CTD-AP 802-11-wireless.channel 3\nnmcli con modify CTD-AP ipv4.method shared ipv4.address 192.168.42.1/24\nnmcli con modify CTD-AP ipv6.method disabled\nnmcli con modify CTD-AP wifi-sec.key-mgmt wpa-psk\nnmcli con modify CTD-AP wifi-sec.psk \"CTDCTDCTD\"\nnmcli con up CTD-AP\n" | sudo tee /opt/nmcli-ctd-ap.sh
 
-sudo systemctl enable dhcpcd
-sudo systemctl enable dnsmasq
-sudo systemctl enable hostapd
+
+echo "@reboot sh /opt/nmcli-ctd-ap.sh" | sudo tee /opt/cron
+sudo crontab /opt/cron
+
+sudo systemctl disable dhcpcd || true
+sudo systemctl disable dnsmasq || true
+sudo systemctl disable hostapd || true
