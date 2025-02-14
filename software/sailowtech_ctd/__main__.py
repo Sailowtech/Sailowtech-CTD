@@ -84,10 +84,12 @@ def main_loop(configfile: str):
     ctd.setup_sensors()
 
     while True:
+        logger.info("Checking for active runs")
         with db_session:
             sel = Run.select(lambda e: e.running == True)
             if len(sel) > 1: logger.warning("More than one run is started!")
             if len(sel) > 0:
+                logger.info(f"Found {len(sel)} active runs")
                 for r in sel[:]:
                     match r.run_type:
                         case RunTypes.MANUAL_STOP:
@@ -100,8 +102,9 @@ def main_loop(configfile: str):
                             if r.measurements.count() >= r.wanted_measurements:
                                 r.running = False
                             logger.info(f"Stopped run with id {r.id} since measurement limit was reached")
-
+                    logger.info(f"Checking if measuring is necessary for run {r.id}")
                     if ctd.is_bus_connected | mockery:
+                        logger.info(f"Measuring for run {r.id}")
                         ctd.measure_all(r.id)
                     else:
                         logger.error("CTD Bus is not connected")
