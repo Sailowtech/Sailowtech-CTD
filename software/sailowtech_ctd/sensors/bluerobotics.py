@@ -1,17 +1,16 @@
 from time import sleep
 import smbus2 as smbus
-from click.formatting import measure_table
 
 from software.sailowtech_ctd.sensors.generic import GenericSensor, SensorBrand
-from .types import Sensor
+from .types import Sensor, Metric
 
 
 class BlueRoboticsSensor(GenericSensor):
     """
     Base for a Bluerobotics sensor
     """
-    def __init__(self, sensor: Sensor, name: str, address: int, min_delay: float = 1):
-        super().__init__(SensorBrand.BlueRobotics, sensor, name, address, min_delay)
+    def __init__(self, sensor: Sensor, name: str, address: int, min_delay: float):
+        super().__init__(SensorBrand.BlueRobotics, sensor, name, address, min_delay, Metric.DEPTH)
 
 
 class DepthSensor(BlueRoboticsSensor):

@@ -3,14 +3,16 @@ import pathlib
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from peewee import fn, Case
 from starlette.responses import StreamingResponse
 from starlette.staticfiles import StaticFiles
 
-from software.sailowtech_ctd.database import db
 from software.sailowtech_ctd.database.measurement import Measurement
 from software.sailowtech_ctd.database.run import Run, create_run, RunTypes, stop_run
 import io
 import csv
+
+from software.sailowtech_ctd.database.sensor import Sensor
 
 app = FastAPI()
 
@@ -61,7 +63,49 @@ def get_runs():
 
     :return: Returns the runs as a list in the data-property
     """
-    return {'data': [p.to_dict() for p in list(Run.select())]}
+    return {'data': list(Run.select().dicts())}
+
+@app.get("/sensors")
+def get_sensors():
+    """
+    Fetch a list of all the runs.
+
+    :return: Returns the runs as a list in the data-property
+    """
+    return {'data': list(Sensor.select().dicts())}
+
+@app.get("/visualization-data")
+def get_visualization_data(run_id: int):
+    """
+    Fetch the data of a run for the visualization
+
+    :return: Returns the data of a run for visualization
+    """
+    sensors = Sensor.select()
+    aggregates = [
+        fn.SUM(Case(None, [(Measurement.sensor == sensor, Measurement.value)], None)).alias(sensor.metric.name)
+        for sensor in sensors
+    ]
+    query = Measurement.select(
+        Measurement.timestamp, *aggregates
+    ).where(Measurement.run == run_id).group_by(Measurement.timestamp)
+
+    chart_data = {"labels": [], "datasets": []}
+    sensor_values = {}
+
+    for row in query.dicts():
+        timestamp = row.pop("timestamp")
+        chart_data["labels"].append(timestamp)
+
+        for sensor, value in row.items():
+            if sensor not in sensor_values:
+                sensor_values[sensor] = []
+            sensor_values[sensor].append(value)
+
+    for sensor, values in sensor_values.items():
+        chart_data["datasets"].append({"label": sensor, "data": values})
+
+    return chart_data
 
 @app.get("/csv")
 def csv_export(run_id: int | None = None):
@@ -77,7 +121,6 @@ def csv_export(run_id: int | None = None):
     else:
         measurements = measurements.where(Measurement.run == run_id)
         headers = {f"Content-Disposition": f"attachment; filename=Measurements_Run_{run_id}_{Run.get(id=run_id).timestamp.strftime("%d.%m.%Y_%H%M")}.csv"}
-
 
     output = io.StringIO()
     writer = csv.writer(output)

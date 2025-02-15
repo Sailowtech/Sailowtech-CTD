@@ -1,8 +1,9 @@
 from peewee import *
 from .base import BaseModel
 from software.sailowtech_ctd.sensors.types import SensorTypeField
+from software.sailowtech_ctd.sensors.types import Metric as MetricType
 from ..sensors.generic import GenericSensor
-
+from .metric import Metric
 
 class Sensor(BaseModel):
     """
@@ -10,6 +11,7 @@ class Sensor(BaseModel):
     """
     name = TextField(unique=True)
     device = SensorTypeField()
+    metric = ForeignKeyField(Metric, backref="sensors")
 
 
 def assert_sensor(sensor: GenericSensor) -> Sensor:
@@ -18,4 +20,4 @@ def assert_sensor(sensor: GenericSensor) -> Sensor:
     :param sensor: The sensor which should be created
     :return: Returns the database object of the sensor
     """
-    return Sensor.get_or_create(name=sensor.name, device=sensor.sensor_type)[0]
+    return Sensor.get_or_create(name=sensor.name, device=sensor.sensor_type, metric=Metric.get(type=sensor.metric_type))[0]

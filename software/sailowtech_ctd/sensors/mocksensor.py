@@ -2,13 +2,14 @@ import smbus2 as smbus
 import random
 
 from software.sailowtech_ctd.sensors.generic import GenericSensor, SensorBrand
-from software.sailowtech_ctd.sensors.types import Sensor
+from software.sailowtech_ctd.sensors.types import Sensor, Metric
+
 
 class MockSensor(GenericSensor):
     """
     Class which provides a mock sensor in order to be able to test the interface
     """
-    def __init__(self, brand: SensorBrand, sensor_type: Sensor, name: str, address: int, min_val: int, max_val: int, min_delay: float = 1):
+    def __init__(self, brand: SensorBrand, sensor_type: Sensor, name: str, address: int, min_val: int, max_val: int, min_delay: float, metric_type: Metric):
         """
         Initialise the mock sensor
         :param brand: Brand of the sensor (mock_sensor)
@@ -21,7 +22,7 @@ class MockSensor(GenericSensor):
         self.min = min_val
         self.max = max_val
         self.min_delay = min_delay
-        super().__init__(brand, sensor_type, name, address, self.min_delay)
+        super().__init__(brand, sensor_type, name, address, self.min_delay, metric_type)
 
     def init(self, bus: smbus.SMBus):
         """

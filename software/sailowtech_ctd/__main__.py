@@ -16,6 +16,7 @@ import uvicorn
 import threading
 
 from software.sailowtech_ctd.database.measurement import Measurement
+from software.sailowtech_ctd.database.metric import Metric, assert_metrics_setup
 from software.sailowtech_ctd.database.sensor import Sensor
 from software.sailowtech_ctd.logger import logger
 from software.sailowtech_ctd.database import db
@@ -45,14 +46,15 @@ def start_debug():
 
 def init_db():
     db.connect()
-    db.create_tables([Measurement, Run, Sensor])
+    db.create_tables([Measurement, Run, Sensor, Metric])
+    assert_metrics_setup()
 
 def main_loop(configfile: str):
     logger.info("Main Loop is starting")
     sel = Run.select().where(Run.running == True)
     if len(sel) > 0:
         logger.info("Stopping all currently running Runs")
-        for r in sel[:]:
+        for r in sel:
             r.running = False
             r.save()
 
@@ -72,7 +74,7 @@ def main_loop(configfile: str):
             for r in sel[:]:
                 match r.run_type:
                     case RunTypes.MANUAL_STOP:
-                        print("Manual")
+                        pass
                     case RunTypes.TIME_DURATION:
                         if (datetime.now() - r.timestamp).total_seconds() >= r.wanted_duration:
                             r.running = False

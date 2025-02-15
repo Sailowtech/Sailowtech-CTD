@@ -20,3 +20,23 @@ class SensorTypeField(Field):
 
     def python_value(self, value):
         return Sensor(value)
+
+
+class Metric(StrEnum):
+    DEPTH = auto()
+    PRESSURE = auto()
+    TEMPERATURE = auto()
+    DISSOLVED_OXYGEN = auto()
+    CONDUCTIVITY = auto()
+
+
+class MetricTypeField(Field):
+    field_type = 'metric_type'
+
+    def db_value(self, value):
+        return value.value
+
+    def python_value(self, value):
+        return Metric(value)
+
+

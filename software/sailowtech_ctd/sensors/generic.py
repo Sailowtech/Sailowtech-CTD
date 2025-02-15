@@ -2,6 +2,8 @@ from enum import Enum, auto
 
 import smbus2 as smbus
 from .types import Sensor
+from ..database.metric import Metric
+
 
 class SensorBrand(Enum):
     """
@@ -15,7 +17,7 @@ class GenericSensor:
     class Commands(Enum):
         ...
 
-    def __init__(self, brand: SensorBrand, sensor_type: Sensor, name: str, address: int, min_delay: float = 1):
+    def __init__(self, brand: SensorBrand, sensor_type: Sensor, name: str, address: int, min_delay: float, metric_type: Metric):
         """
         Initialisation of a generic sensor
         :param brand: Brand of the sensor
@@ -26,6 +28,7 @@ class GenericSensor:
         """
         self.brand: SensorBrand = brand
         self.sensor_type: Sensor = sensor_type
+        self.metric_type: Metric = metric_type
 
         self.name: str = name
         self.addr: int = address

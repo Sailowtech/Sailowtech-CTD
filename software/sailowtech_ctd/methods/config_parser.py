@@ -7,7 +7,7 @@ import os
 import pathlib
 
 from software.sailowtech_ctd.sensors.mocksensor import MockSensor
-from software.sailowtech_ctd.sensors.types import Sensor
+from software.sailowtech_ctd.sensors.types import Sensor, Metric
 
 
 def load_file_to_yaml(path: str) -> object:
@@ -66,7 +66,8 @@ def get_sensors(config: object) -> list[GenericSensor]:
                 s = DepthSensor(sensor["name"], sensor["address"], min_delay)
                 sensors.append(s)
             case "MOCK_SENSOR":
-                s = MockSensor(SensorBrand.MockBrand, Sensor.MOCK_SENSOR, sensor["name"], sensor["address"], sensor["min"], sensor["max"], min_delay)
+                if "metric-type" not in sensor: logger.error(f"Attribute metric-type not defined for sensor {n}"); exit(1)
+                s = MockSensor(SensorBrand.MockBrand, Sensor.MOCK_SENSOR, sensor["name"], sensor["address"], sensor["min"], sensor["max"], min_delay, Metric(sensor["metric-type"].lower()))
                 sensors.append(s)
             case _:
                 logger.warning(f"Sensor {n} was not set up. Wrong name?")

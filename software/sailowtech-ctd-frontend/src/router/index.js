@@ -10,9 +10,9 @@ const router = createRouter({
       component: QuickAccessView,
     },
     {
-      path: '/about',
-      name: 'about',
-      component: () => import('../views/AboutView.vue'),
+      path: '/visualize',
+      name: 'visualize',
+      component: () => import('../views/VisualizationView.vue'),
     },
   ],
 })

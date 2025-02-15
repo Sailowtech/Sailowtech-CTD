@@ -4,6 +4,7 @@ sensors:
     name: "Mock Sensor 1"
     address: 0x42
     sensor-type: "MOCK_SENSOR"
+    metric-type: "DEPTH"
     min: 0.1
     max: 5
     min-delay: 1
@@ -11,6 +12,7 @@ sensors:
     name: "Mock Sensor 2"
     address: 0x43
     sensor-type: "MOCK_SENSOR"
+    metric-type: "TEMPERATURE"
     min: 0.1
     max: 10
     min-delay: 1.5

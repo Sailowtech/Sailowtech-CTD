@@ -17,19 +17,23 @@ import { useWebapiStore } from '@/stores/webapi'
     <div class="m-5">
       <div class="text-2xl">Currently running</div>
       <ul v-if="hasrunning">
-        <template v-for="item in runs"><li v-if="item.running" class="flex justify-between gap-x-6 py-5">
-          <RunItem :id="item.id" :timestamp="item.timestamp" :run_type="item.run_type" :wanted_duration="item.wanted_duration" :wanted_measurements="item.wanted_measurements" :running="item.running"></RunItem>
-        </li></template>
+        <template v-for="item in runs">
+          <li v-if="item.running" class="flex justify-between gap-x-6 py-5">
+            <RunItem :id="item.id" :timestamp="item.timestamp" :run_type="item.run_type" :wanted_duration="item.wanted_duration" :wanted_measurements="item.wanted_measurements" :running="item.running"></RunItem>
+          </li>
+        </template>
       </ul>
       <p v-else>No measurements currently running</p>
     </div>
 
     <div class="m-5">
-      <div class="text-2xl">All Runs</div>
+      <div class="text-2xl">Finished Runs</div>
       <ul role="list" class="divide-y divide-gray-100" v-if="runs">
-        <li v-for="item in runs" class="flex justify-between gap-x-6 py-5">
-          <RunItem :id="item.id" :timestamp="item.timestamp" :run_type="item.run_type" :wanted_duration="item.wanted_duration" :wanted_measurements="item.wanted_measurements" :running="item.running"></RunItem>
-        </li>
+        <template v-for="item in runs">
+          <li v-if="!item.running" class="flex justify-between gap-x-6 py-5">
+            <RunItem v-if="!item.running" :id="item.id" :timestamp="item.timestamp" :run_type="item.run_type" :wanted_duration="item.wanted_duration" :wanted_measurements="item.wanted_measurements" :running="item.running"></RunItem>
+          </li>
+        </template>
       </ul>
       <p v-else>Loading...</p>
     </div>
@@ -50,20 +54,7 @@ export default {
     };
   },
   methods: {
-    start_manual_run() {
-      const store = useWebapiStore()
-      const apiUrl = `${store.endpoint}/run?run_type=0`;
-
-      axios.get(apiUrl)
-        .then((response) => {
-          console.log(response)
-        })
-        .catch((error) => {
-          console.error('Error fetching data:', error);
-        });
-    }
-  },
-  mounted() {
+    fetch_runs() {
       const store = useWebapiStore()
       const apiUrl = `${store.endpoint}/runs`;
 
@@ -75,8 +66,29 @@ export default {
         .catch((error) => {
           console.error('Error fetching data:', error);
         });
+    },
+    start_manual_run() {
+      const store = useWebapiStore()
+      const apiUrl = `${store.endpoint}/run?run_type=0`;
 
-        
+      axios.get(apiUrl)
+        .then((response) => {
+          console.log(response)
+        })
+        .catch((error) => {
+          console.error('Error fetching data:', error);
+        });
+
+        setTimeout(function(){
+          fetch_runs()
+        }, 500);
+    }
+  },
+  mounted() {
+      this.fetch_runs()
+      window.setInterval(() => {
+        this.fetch_runs()
+      }, 1000)
     },
 };
 
