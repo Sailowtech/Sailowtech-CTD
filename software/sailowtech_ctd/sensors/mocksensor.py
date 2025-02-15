@@ -8,7 +8,7 @@ class MockSensor(GenericSensor):
     """
     Class which provides a mock sensor in order to be able to test the interface
     """
-    def __init__(self, brand: SensorBrand, sensor_type: Sensor, name: str, address: int, min_val: int, max_val: int):
+    def __init__(self, brand: SensorBrand, sensor_type: Sensor, name: str, address: int, min_val: int, max_val: int, min_delay: float = 1):
         """
         Initialise the mock sensor
         :param brand: Brand of the sensor (mock_sensor)
@@ -20,7 +20,8 @@ class MockSensor(GenericSensor):
         """
         self.min = min_val
         self.max = max_val
-        super().__init__(brand, sensor_type, name, address)
+        self.min_delay = min_delay
+        super().__init__(brand, sensor_type, name, address, self.min_delay)
 
     def init(self, bus: smbus.SMBus):
         """
@@ -31,9 +32,19 @@ class MockSensor(GenericSensor):
         return True
 
     def write_read_command(self, bus: smbus.SMBus) -> bool:
+        """
+        Method to write the read command to the sensor - is ignored
+        :param bus: The bus to be used - is ignored
+        :return: Returns True
+        """
         return True
 
     def read_result(self, bus: smbus.SMBus) -> float:
+        """
+        Method to read the measurement result
+        :param bus: The bus to be used - is ignored
+        :return: Returns the measured value
+        """
         return self.measure_value(bus)
 
     def measure_value(self, bus: smbus.SMBus):

@@ -1,3 +1,6 @@
-from pony import orm
+from peewee import *
+db = SqliteDatabase('data/debug.sqlite')
 
-db = orm.Database()
+class BaseModel(Model):
+    class Meta:
+        database = db

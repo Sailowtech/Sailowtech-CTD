@@ -37,28 +37,6 @@ def is_mock(config: object) -> bool:
     else:
         return False
 
-def get_interval(config: object) -> int:
-    """
-    Get the measurement interval specified in the config
-    :param config: The config object
-    :return: Returns an int of the measurement interval in seconds
-    """
-    if "interval" not in config:
-        logger.error("No interval configured in Config!"); exit(1)
-    else:
-        return config["interval"]
-
-def get_threshold(config: object) -> int:
-    """
-    Get the depth cutoff threshold specified in the config
-    :param config: The config object
-    :return: Returns an int of the depth threshold
-    """
-    if "threshold" not in config:
-        logger.error("No threshold configured in Config!"); exit(1)
-    else:
-        return config["threshold"]
-
 def get_sensors(config: object) -> list[GenericSensor]:
     """
     Get the list of Sensor objects from the previously loaded config
@@ -73,23 +51,22 @@ def get_sensors(config: object) -> list[GenericSensor]:
         if "sensor-type" not in sensor: logger.error(f"Attribute sensor-type not defined for sensor {n}"); exit(1)
         if "name" not in sensor: logger.error(f"Attribute name not defined for sensor {n}"); exit(1)
         if "address" not in sensor: logger.error(f"Attribute address not defined for sensor {n}"); exit(1)
+        min_delay = sensor["min-delay"] if "min-delay" in sensor else 0
         match sensor["sensor-type"]:
             case "ATLAS_EZO_DO":
-                s = AtlasSensor(Sensor.ATLAS_EZO_DO, sensor["name"], sensor["address"])
+                s = AtlasSensor(Sensor.ATLAS_EZO_DO, sensor["name"], sensor["address"], min_delay)
                 sensors.append(s)
             case "ATLAS_EZO_CONDUCTIVITY":
-                s = AtlasSensor(Sensor.ATLAS_EZO_CONDUCTIVITY, sensor["name"], sensor["address"])
+                s = AtlasSensor(Sensor.ATLAS_EZO_CONDUCTIVITY, sensor["name"], sensor["address"], min_delay)
                 sensors.append(s)
             case "ATLAS_EZO_TEMP":
-                s = AtlasSensor(Sensor.ATLAS_EZO_TEMP, sensor["name"], sensor["address"])
+                s = AtlasSensor(Sensor.ATLAS_EZO_TEMP, sensor["name"], sensor["address"], min_delay)
                 sensors.append(s)
             case "BLUEROBOTICS_BAR30_DEPTH":
-                min_delay = 1
-                if "min-delay" in sensor: min_delay = sensor["min-delay"]
                 s = DepthSensor(sensor["name"], sensor["address"], min_delay)
                 sensors.append(s)
             case "MOCK_SENSOR":
-                s = MockSensor(SensorBrand.MockBrand, Sensor.MOCK_SENSOR, sensor["name"], sensor["address"], sensor["min"], sensor["max"])
+                s = MockSensor(SensorBrand.MockBrand, Sensor.MOCK_SENSOR, sensor["name"], sensor["address"], sensor["min"], sensor["max"], min_delay)
                 sensors.append(s)
             case _:
                 logger.warning(f"Sensor {n} was not set up. Wrong name?")

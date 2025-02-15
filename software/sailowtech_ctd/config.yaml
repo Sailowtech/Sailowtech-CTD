@@ -4,19 +4,20 @@ sensors:
     name: "Dissolved Oxygen"
     address: 0x61
     sensor-type: "ATLAS_EZO_DO"
+    min-delay: 1.05
   conductivity:
     name: "Conductivity Probe"
     address: 0x64
     sensor-type: "ATLAS_EZO_CONDUCTIVITY"
+    min-delay: 1.05
   temperature-do:
     name: "Temperature (DO Sensor)"
     address: 0x66
     sensor-type: "ATLAS_EZO_TEMP"
+    min-delay: 1.05
   depth:
     name: "Depth Sensor"
     address: 0x76
     sensor-type: "BLUEROBOTICS_BAR30_DEPTH"
-    min-delay: 0.3
-interval: 1 # seconds
+    min-delay: 1.05
 mock: false
-threshold: 300

@@ -51,9 +51,10 @@ class GenericSensor:
     def __str__(self):
         return f'{self.__class__.__name__}(' \
                f'name="{self.name}", ' \
-               f'address={hex(self.addr)}' \
-               f'brand={self.brand}' \
-               f'type={self.sensor_type}' \
+               f'address={hex(self.addr)}, ' \
+               f'brand={self.brand}, ' \
+               f'type={self.sensor_type}, ' \
+               f'min_delay={self.min_delay}' \
                f')'
 
     def __repr__(self):

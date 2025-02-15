@@ -6,12 +6,12 @@ sensors:
     sensor-type: "MOCK_SENSOR"
     min: 0.1
     max: 5
+    min-delay: 1
   mock-sensor2:
     name: "Mock Sensor 2"
     address: 0x43
     sensor-type: "MOCK_SENSOR"
     min: 0.1
     max: 10
-interval: 1 # seconds
+    min-delay: 1.5
 mock: true
-threshold: 300

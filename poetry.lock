@@ -426,15 +426,14 @@ files = [
 ]
 
 [[package]]
-name = "pony"
-version = "0.7.19"
-description = "Pony Object-Relational Mapper"
+name = "peewee"
+version = "3.17.9"
+description = "a little orm"
 optional = false
 python-versions = "*"
 groups = ["main"]
 files = [
-    {file = "pony-0.7.19-py3-none-any.whl", hash = "sha256:5112b4cf40d3f24e93ae66dc5ab7dc6813388efa870e750928d60dc699873cf5"},
-    {file = "pony-0.7.19.tar.gz", hash = "sha256:f7f83b2981893e49f7f18e8def52ad8fa8f8e6c5f9583b9aaed62d4d85036a0f"},
+    {file = "peewee-3.17.9.tar.gz", hash = "sha256:fe15cd001758e324c8e3ca8c8ed900e7397c2907291789e1efc383e66b9bc7a8"},
 ]
 
 [[package]]
@@ -1045,4 +1044,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "=3.12.8"
-content-hash = "28ed2b09573b4c488ef0458e9697bab189cbb171181c507601385e0d857a7168"
+content-hash = "1d9fb81625f7e186442d3676adb371f0f2ff58d5639069195f38f71b02b48eb4"

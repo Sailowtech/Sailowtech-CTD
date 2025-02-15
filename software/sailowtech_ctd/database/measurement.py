@@ -1,14 +1,13 @@
 from datetime import datetime
 
-from pony.orm import Required, Optional
-
-from .base import db
+from peewee import *
+from .base import BaseModel
 from .run import Run
 from .sensor import Sensor
 
 
-class Measurement(db.Entity):
-    timestamp = Required(datetime, default=datetime.now)
-    run = Required("Run")
-    sensor = Required("Sensor")
-    value = Required(float)
+class Measurement(BaseModel):
+    timestamp = DateTimeField(default=datetime.now)
+    run = ForeignKeyField(Run, backref="measurements")
+    sensor = ForeignKeyField(Sensor, backref="measurements")
+    value = FloatField()
