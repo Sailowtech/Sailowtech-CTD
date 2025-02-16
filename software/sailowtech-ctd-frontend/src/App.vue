@@ -53,8 +53,19 @@ export default {
             title: "System time",
             text: `System time is ${new Date(Date.parse(response.data.data.system_time)).toLocaleString("de-CH")}`,
           });
-
+          console.log(Date.parse(response.data.data.system_time))
           this.system_time = response.data.system_time;
+          if (Date.now()-Date.parse(response.data.data.system_time) > 10000) {
+            axios.post(`${store.endpoint}/system-time`, {timestamp: Date.now()/1000})
+            .then(() => {
+              this.$notify({
+                title: "Synced system time",
+              });
+            })
+            .catch((error) => {
+              console.error('Error fetching data:', error);
+            });
+          }
         })
         .catch((error) => {
           console.error('Error fetching data:', error);

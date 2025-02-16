@@ -13,4 +13,3 @@ sudo systemctl enable sailowtech-ctd-web
 cd /home/ctd/Sailowtech-CTD/software/sailowtech-ctd-frontend/
 sudo -u ctd npm install
 sudo -u ctd npm run build
-sudo timedatectl set-ntp false

@@ -6,6 +6,7 @@ printf "nmcli con delete CTD-AP\nnmcli con add type wifi ifname wlan0 mode ap co
 
 
 echo "@reboot sh /opt/nmcli-ctd-ap.sh" | sudo tee /opt/cron
+echo "@reboot timedatectl set-ntp false" | sudo tee -a /opt/cron
 sudo crontab /opt/cron
 
 sudo systemctl disable dhcpcd || true
