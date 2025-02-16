@@ -4,7 +4,7 @@ import os
 import pathlib
 from errno import EPERM
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from peewee import fn, Case
 from starlette.responses import StreamingResponse
@@ -15,8 +15,14 @@ from software.sailowtech_ctd.database.measurement import Measurement
 from software.sailowtech_ctd.database.run import Run, create_run, RunTypes, stop_run
 import io
 import csv
+from pydantic import BaseModel
 
 from software.sailowtech_ctd.database.sensor import Sensor
+
+
+class TimestampRequest(BaseModel):
+    timestamp: int
+
 
 app = FastAPI()
 
@@ -50,18 +56,18 @@ def system_time():
     return {"data": {"system_time": datetime.datetime.now()}, "success": True}
 
 @app.post("/system-time")
-def system_time(timestamp: int):
+def system_time(request: TimestampRequest):
     """
     Set the system time. Used to synchronize the time if the device has no internet access
-    :param timestamp: Timestamp as Unix epoch
+    :param request: Timestamp as Unix epoch
     :return: Returns true in success if it was set successfully
     """
-
+    timestamp = request.timestamp
     logger.info(f"Attempting to set system time to {timestamp}")
     try:
         time.clock_settime(time.CLOCK_REALTIME , timestamp)
         return {"success": True}
-    except EPERM:
+    except:
         logger.error("Unable to set system time because of missing privileges. Not running with systemd?")
         return {"success": False}
 
@@ -149,7 +155,7 @@ def csv_export(run_id: int | None = None):
         headers = {f"Content-Disposition": "attachment; filename=measurements.csv"}
     else:
         measurements = measurements.where(Measurement.run == run_id)
-        headers = {f"Content-Disposition": f"attachment; filename=Measurements_Run_{run_id}_{Run.get(id=run_id).timestamp.strftime("%d.%m.%Y_%H%M")}.csv"}
+        headers = {f"Content-Disposition": f"attachment; filename=Measurements_Run_{run_id}_{Run.get(id=run_id).timestamp.strftime('%d.%m.%Y_%H%M')}.csv"}
 
     output = io.StringIO()
     writer = csv.writer(output)
