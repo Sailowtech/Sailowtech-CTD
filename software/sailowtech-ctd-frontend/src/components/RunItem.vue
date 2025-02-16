@@ -47,6 +47,10 @@ export default {
         axios.get(apiUrl)
           .then((response) => {
             this.deleted = response.data;
+            this.$notify({
+              title: "Stopped run",
+              text: `Stopped run with id ${id}`,
+            });
           })
           .catch((error) => {
             console.error('Error fetching data:', error);

@@ -73,6 +73,10 @@ export default {
 
       axios.get(apiUrl)
         .then((response) => {
+          this.$notify({
+            title: "Started run",
+            text: `Started run with id ${response.data}`,
+          });
           console.log(response)
         })
         .catch((error) => {

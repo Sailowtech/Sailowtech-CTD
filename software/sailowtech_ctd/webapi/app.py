@@ -1,5 +1,8 @@
+import time
+import datetime
 import os
 import pathlib
+from errno import EPERM
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -7,6 +10,7 @@ from peewee import fn, Case
 from starlette.responses import StreamingResponse
 from starlette.staticfiles import StaticFiles
 
+from software.sailowtech_ctd.logger import logger
 from software.sailowtech_ctd.database.measurement import Measurement
 from software.sailowtech_ctd.database.run import Run, create_run, RunTypes, stop_run
 import io
@@ -34,7 +38,32 @@ def root():
 
     :return: Returns a welcome message in a JSON
     """
-    return {"data": "Welcome to the CTD"}
+    return {"data": "Welcome to the CTD", "success": True}
+
+@app.get("/system-time")
+def system_time():
+    """
+    Get the current system-time. Can be used to check if synchronization is necessary.
+
+    :return: Returns the current timestamp in data.system-time
+    """
+    return {"data": {"system_time": datetime.datetime.now()}, "success": True}
+
+@app.post("/system-time")
+def system_time(timestamp: int):
+    """
+    Set the system time. Used to synchronize the time if the device has no internet access
+    :param timestamp: Timestamp as Unix epoch
+    :return: Returns true in success if it was set successfully
+    """
+
+    logger.info(f"Attempting to set system time to {timestamp}")
+    try:
+        time.clock_settime(time.CLOCK_REALTIME , timestamp)
+        return {"success": True}
+    except EPERM:
+        logger.error("Unable to set system time because of missing privileges. Not running with systemd?")
+        return {"success": False}
 
 @app.get("/run")
 def run(run_type: RunTypes, run_data: int = 0):
