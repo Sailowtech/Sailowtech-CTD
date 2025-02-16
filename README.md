@@ -1,4 +1,4 @@
-# Sailowtech Open-CTD - Low-Tech CTD Probe
+# Sailowtech-CTD - Low-Tech CTD Probe
 Welcome on the repository of the Sailowtech CTD Project, an affordable and open-source CTD probe tailored for scientific expeditions.
 
 ## Why does this project exist?
