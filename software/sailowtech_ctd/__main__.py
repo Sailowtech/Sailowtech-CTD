@@ -37,7 +37,7 @@ def start():
 
 def start_debug():
     """Start app with uvicorn"""
-    web_thread = threading.Thread(target=uvicorn.run, kwargs={"app": "software.sailowtech_ctd.webapi.app:app", "host": "127.0.0.1", "port": 8000})
+    web_thread = threading.Thread(target=uvicorn.run, kwargs={"app": "software.sailowtech_ctd.webapi.app:app", "host": "0.0.0.0", "port": 8000})
     logger.info("Starting web service thread...")
     web_thread.start()
     logger.info("Started web service thread")
