@@ -159,7 +159,7 @@ def csv_export(run_id: int | None = None):
 
     output = io.StringIO()
     writer = csv.writer(output)
-    writer.writerow(["run_id", "value", "timestamp", "sensor_name"])
+    writer.writerow(["run_id", "timestamp", "value", "sensor_name"])
     for m in measurements: writer.writerow((m.run.id, m.timestamp, m.value, m.sensor.name))
     output.seek(0)
     return StreamingResponse(
