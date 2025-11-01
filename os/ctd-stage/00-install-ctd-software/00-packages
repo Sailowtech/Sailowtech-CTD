@@ -16,3 +16,4 @@ libxmlsec1-dev
 libffi-dev
 liblzma-dev
 npm
+i2c-tools
